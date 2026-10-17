@@ -3,7 +3,9 @@ from backend.app.indicators.calculations import (
     calculate_rsi,
     calculate_atr,
     calculate_relative_strength,
-    compute_all_indicators
+    compute_all_indicators,
+    calculate_resistance_and_swing_high,
+    compute_momentum_pro_indicators
 )
 
 __all__ = [
@@ -11,5 +13,7 @@ __all__ = [
     "calculate_rsi",
     "calculate_atr",
     "calculate_relative_strength",
-    "compute_all_indicators"
+    "compute_all_indicators",
+    "calculate_resistance_and_swing_high",
+    "compute_momentum_pro_indicators"
 ]

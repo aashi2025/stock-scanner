@@ -15,9 +15,9 @@ from backend.app.engines.backtest import calculate_indian_statutory_charges
 from backend.app.indicators.calculations import (
     calculate_ema,
     calculate_rsi,
-    calculate_atr,
-    calculate_resistance_and_swing_high
+    calculate_atr
 )
+from backend.app.momentum_pro.indicators import calculate_resistance_and_swing_high
 
 def run_momentum_pro_backtest(
     provider: MarketDataProvider,

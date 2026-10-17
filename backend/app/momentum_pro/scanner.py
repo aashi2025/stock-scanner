@@ -12,7 +12,7 @@ import pandas as pd
 from datetime import datetime
 
 from backend.app.data_providers.base import MarketDataProvider
-from backend.app.indicators.calculations import compute_momentum_pro_indicators
+from backend.app.momentum_pro.indicators import compute_momentum_pro_indicators
 from backend.app.momentum_pro.scoring import calculate_momentum_setup_score
 from backend.app.momentum_pro.trade_planner import calculate_trade_plan
 

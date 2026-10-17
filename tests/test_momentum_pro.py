@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 
-from backend.app.indicators.calculations import (
+from backend.app.momentum_pro.indicators import (
     calculate_resistance_and_swing_high,
     compute_momentum_pro_indicators
 )
