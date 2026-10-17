@@ -36,6 +36,7 @@ from backend.app.engines.delivery_tracker import analyze_accumulation_distributi
 from backend.app.watchlist.manager import add_to_watchlist, remove_from_watchlist, monitor_watchlist_health, load_watchlist
 from backend.app.alerts.telegram_notifier import format_telegram_alert, send_telegram_alert
 from backend.app.charts.plotly_charts import create_candlestick_chart, create_portfolio_equity_chart
+from backend.app.momentum_pro.ui import render_momentum_pro_page
 
 # Page Configuration
 st.set_page_config(
@@ -181,9 +182,41 @@ if st.sidebar.button("📢 Generate Telegram Alert"):
 
 st.sidebar.info("💡 **Hinglish Advice:** Phase 2 में मल्टी-टाइमफ्रेम (साप्ताहिक + दैनिक) दोनों की पुष्टि के बाद ही हाई-कॉन्विक्शन सेटअप बनता है।")
 
-# Header Section
-st.markdown("<div class='main-header'>📈 Indian Stock Research Platform — Phase 2</div>", unsafe_allow_html=True)
-st.markdown("<div class='sub-header'>Multi-timeframe confirmation, smart money accumulation tracking, portfolio backtesting, and interactive charting.</div>", unsafe_allow_html=True)
+# Session State for View Navigation (Preserves selection across reruns)
+if "current_view" not in st.session_state:
+    st.session_state["current_view"] = "scanner"
+
+# Available Symbols
+available_syms = []
+if hasattr(provider, "list_available_symbols"):
+    available_syms = provider.list_available_symbols()
+if not available_syms:
+    available_syms = ["RELIANCE", "TCS", "INFY", "HDFCBANK", "ITC", "MARUTI", "ICICIBANK", "BHARTIARTL", "SBIN", "LT"]
+
+# Top Header & Navigation Bar
+top_c1, top_c2 = st.columns([3, 1])
+with top_c1:
+    st.markdown("<div class='main-header'>📈 Indian Stock Research Platform — Phase 2</div>", unsafe_allow_html=True)
+    st.markdown("<div class='sub-header'>Multi-timeframe confirmation, smart money accumulation tracking, portfolio backtesting, and interactive charting.</div>", unsafe_allow_html=True)
+
+with top_c2:
+    if st.session_state["current_view"] == "scanner":
+        if st.button("🚀 Momentum Pro", type="primary", use_container_width=True, key="btn_open_momentum_pro"):
+            st.session_state["current_view"] = "momentum_pro"
+            st.rerun()
+    else:
+        if st.button("← Back to Old Scanner", use_container_width=True, key="btn_top_back"):
+            st.session_state["current_view"] = "scanner"
+            st.rerun()
+
+# Render View Based on Selection
+if st.session_state["current_view"] == "momentum_pro":
+    render_momentum_pro_page(provider, available_syms)
+    st.stop()
+
+# ==========================================
+# OLD SCANNER VIEW (100% UNCHANGED & PRESERVED)
+# ==========================================
 
 # Main Navigation Tabs
 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
@@ -195,13 +228,6 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "📌 Watchlist & Alerts",
     "🏥 Data Health"
 ])
-
-# Available Symbols
-available_syms = []
-if hasattr(provider, "list_available_symbols"):
-    available_syms = provider.list_available_symbols()
-if not available_syms:
-    available_syms = ["RELIANCE", "TCS", "INFY", "HDFCBANK", "ITC", "MARUTI", "ICICIBANK", "BHARTIARTL", "SBIN", "LT"]
 
 
 # ==========================================
