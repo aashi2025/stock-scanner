@@ -284,7 +284,18 @@ def render_momentum_pro_page(provider: MarketDataProvider, available_symbols: Li
             st.markdown(f"#### 📊 Interactive Candlestick Chart: **{cand_item['symbol']}**")
             stock_df = provider.get_historical_data(cand_item["symbol"], period="6mo", interval="1d")
             if not stock_df.empty:
-                fig = create_candlestick_chart(stock_df, cand_item["symbol"], ema_fast=9, ema_slow=20)
+                ref_lvls = {
+                    "entry_reference": tp.get("entry_reference"),
+                    "stop_loss_reference": tp.get("stop_loss"),
+                    "target_1_reference": tp.get("target_1")
+                }
+                fig = create_candlestick_chart(
+                    stock_df,
+                    cand_item["symbol"],
+                    reference_levels=ref_lvls,
+                    ema_fast=9,
+                    ema_slow=20
+                )
                 st.plotly_chart(fig, use_container_width=True)
         else:
             st.info("No candidates matched the current minimum score threshold. Try lowering the score slider in Parameters.")

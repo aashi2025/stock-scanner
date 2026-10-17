@@ -16,7 +16,10 @@ def create_candlestick_chart(
     df: pd.DataFrame,
     symbol: str = "STOCK",
     lookback_bars: int = 120,
-    reference_levels: Optional[Dict[str, Any]] = None
+    reference_levels: Optional[Dict[str, Any]] = None,
+    ema_fast: int = 50,
+    ema_slow: int = 200,
+    **kwargs
 ) -> go.Figure:
     """
     Creates an interactive 2-panel Plotly Candlestick + RSI chart.
@@ -24,8 +27,10 @@ def create_candlestick_chart(
     plot_df = df.tail(lookback_bars).copy()
     
     # Calculate indicators
-    plot_df["EMA_50"] = calculate_ema(plot_df["Close"], 50)
-    plot_df["EMA_200"] = calculate_ema(plot_df["Close"], 200)
+    fast_col = f"EMA_{ema_fast}"
+    slow_col = f"EMA_{ema_slow}"
+    plot_df[fast_col] = calculate_ema(plot_df["Close"], ema_fast)
+    plot_df[slow_col] = calculate_ema(plot_df["Close"], ema_slow)
     plot_df["RSI_14"] = calculate_rsi(plot_df["Close"], 14)
 
     dates = [d.strftime("%Y-%m-%d") if hasattr(d, "strftime") else str(d) for d in plot_df.index]
@@ -58,8 +63,8 @@ def create_candlestick_chart(
     fig.add_trace(
         go.Scatter(
             x=dates,
-            y=plot_df["EMA_50"],
-            name="50 EMA",
+            y=plot_df[fast_col],
+            name=f"{ema_fast} EMA",
             line=dict(color="#3B82F6", width=1.8) # Blue
         ),
         row=1, col=1
@@ -68,8 +73,8 @@ def create_candlestick_chart(
     fig.add_trace(
         go.Scatter(
             x=dates,
-            y=plot_df["EMA_200"],
-            name="200 EMA",
+            y=plot_df[slow_col],
+            name=f"{ema_slow} EMA",
             line=dict(color="#F59E0B", width=2.0, dash="dot") # Amber
         ),
         row=1, col=1
