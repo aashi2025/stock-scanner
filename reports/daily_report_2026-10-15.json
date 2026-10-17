@@ -1,0 +1,1268 @@
+{
+  "report_date": "2026-10-15",
+  "generated_at": "2026-10-15 23:30:58",
+  "validation_summary": {
+    "total_datasets": 11,
+    "verified": 11,
+    "stale": 0,
+    "invalid": 0
+  },
+  "fresh_swing_signals": [
+    {
+      "symbol": "ICICIBANK",
+      "company_name": "ICICIBANK",
+      "sector": "General",
+      "price": 1389.4,
+      "change_percent": 3.8,
+      "swing_score": 92.0,
+      "classification": "STRONG SWING CANDIDATE",
+      "rsi_fresh_crossover": true,
+      "rsi_status": "Fresh Crossover Above 50",
+      "rsi_value": 60.9,
+      "ema_trend_bullish": true,
+      "ema_50": 1367.23,
+      "ema_200": 1357.13,
+      "volume_breakout": true,
+      "vol_ratio": 1.74,
+      "volume": 17114746,
+      "avg_volume_20d": 9844515,
+      "dist_from_52w_high_pct": 5.33,
+      "high_52w": 1467.63,
+      "sector_score": 60.0,
+      "candle_timestamp": "2026-10-15 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Validated Local CSV",
+      "passed_rules": [
+        {
+          "name": "RSI(14) Fresh Crossover > 50",
+          "detail": "Fresh bullish crossover! RSI crossed from 48.0 to 60.9.",
+          "points": 25.0
+        },
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b91389.4 > EMA50 \u20b91367.23 & EMA200 \u20b91357.13",
+          "points": 25.0
+        },
+        {
+          "name": "Strong Volume Surge",
+          "detail": "Volume is 1.74x 20-day average volume.",
+          "points": 20.0
+        },
+        {
+          "name": "Within 15% of 52-Week High",
+          "detail": "Trading 5.33% below 52-week high (\u20b91467.63).",
+          "points": 12.0
+        },
+        {
+          "name": "Sector Neutral",
+          "detail": "General sector score is 60.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [],
+      "reasons": [
+        "\u26a1 Fresh RSI(14) Bullish Crossover above 50 triggered on completed candle",
+        "\ud83d\udcc8 Strong uptrend: Price \u20b91389.4 trading above 50 EMA (\u20b91367.23) and 200 EMA (\u20b91357.13)",
+        "\ud83d\udd25 Massive volume breakout (1.74x 20-day average volume)",
+        "Within consolidation distance (5.33%) of 52-week high"
+      ],
+      "ranking": {
+        "composite_score": 93.6,
+        "trend_score": 100.0,
+        "momentum_score": 85.0,
+        "fundamental_score": null,
+        "valuation_score": null,
+        "risk_score": 0.0,
+        "safety_score": 100.0,
+        "has_fundamental_data": false,
+        "has_valuation_data": false,
+        "weights_used": {
+          "trend": 0.4285714285714286,
+          "momentum": 0.4285714285714286,
+          "safety": 0.14285714285714288
+        },
+        "breakdown": {
+          "trend": [
+            "Price > 50 EMA (+25)",
+            "Price > 200 EMA (+25)",
+            "50 EMA > 200 EMA Golden Alignment (+30)",
+            "Within 10% of 52W High (5.33%) (+20)"
+          ],
+          "momentum": [
+            "RSI 60.9 in prime bullish acceleration zone (+35)",
+            "\u26a1 Fresh RSI(14) crossover above 50 triggered on completed candle (+25)",
+            "Volume Breakout 1.74x >= 1.2x 20-DMA (+15)",
+            "Outperforming NIFTY (+4.28%) (+10)"
+          ],
+          "fundamental": [
+            "Fundamental data unavailable on disk. (Verify via Screener.in)"
+          ],
+          "valuation": [
+            "Valuation ratios unavailable. Not fabricated."
+          ],
+          "risk": []
+        },
+        "disclaimer": "RESEARCH HEURISTICS DISCLAIMER: The Trend, Momentum, Quality, Valuation, and Risk scores are rule-based quantitative models intended solely for educational and research purposes. They do not constitute investment advice, financial planning, or guaranteed price predictions."
+      },
+      "reference_levels": {
+        "entry_reference": 1389.4,
+        "stop_loss_reference": 1348.44,
+        "target_1_reference": 1471.32,
+        "target_2_reference": 1512.28,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 40.96
+      }
+    },
+    {
+      "symbol": "BHARTIARTL",
+      "company_name": "BHARTIARTL",
+      "sector": "General",
+      "price": 1854.0,
+      "change_percent": 3.31,
+      "swing_score": 77.0,
+      "classification": "CONFIRMED SWING SETUP",
+      "rsi_fresh_crossover": true,
+      "rsi_status": "Fresh Crossover Above 50",
+      "rsi_value": 59.61,
+      "ema_trend_bullish": false,
+      "ema_50": 1839.75,
+      "ema_200": 1879.53,
+      "volume_breakout": true,
+      "vol_ratio": 1.64,
+      "volume": 11273037,
+      "avg_volume_20d": 6858872,
+      "dist_from_52w_high_pct": 13.67,
+      "high_52w": 2147.47,
+      "sector_score": 60.0,
+      "candle_timestamp": "2026-10-15 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Validated Local CSV",
+      "passed_rules": [
+        {
+          "name": "RSI(14) Fresh Crossover > 50",
+          "detail": "Fresh bullish crossover! RSI crossed from 48.0 to 59.61.",
+          "points": 25.0
+        },
+        {
+          "name": "Strong Volume Surge",
+          "detail": "Volume is 1.64x 20-day average volume.",
+          "points": 20.0
+        },
+        {
+          "name": "Within 15% of 52-Week High",
+          "detail": "Trading 13.67% below 52-week high (\u20b92147.47).",
+          "points": 12.0
+        },
+        {
+          "name": "Sector Neutral",
+          "detail": "General sector score is 60.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b91854.0 vs EMA50 \u20b91839.75 / EMA200 \u20b91879.53",
+          "points": 10.0
+        }
+      ],
+      "reasons": [
+        "\u26a1 Fresh RSI(14) Bullish Crossover above 50 triggered on completed candle",
+        "\ud83d\udd25 Massive volume breakout (1.64x 20-day average volume)",
+        "Within consolidation distance (13.67%) of 52-week high"
+      ],
+      "ranking": {
+        "composite_score": 65.7,
+        "trend_score": 35.0,
+        "momentum_score": 85.0,
+        "fundamental_score": null,
+        "valuation_score": null,
+        "risk_score": 0.0,
+        "safety_score": 100.0,
+        "has_fundamental_data": false,
+        "has_valuation_data": false,
+        "weights_used": {
+          "trend": 0.4285714285714286,
+          "momentum": 0.4285714285714286,
+          "safety": 0.14285714285714288
+        },
+        "breakdown": {
+          "trend": [
+            "Price > 50 EMA (+25)",
+            "Price <= 200 EMA (0)",
+            "50 EMA <= 200 EMA (0)",
+            "Within 20% of 52W High (13.67%) (+10)"
+          ],
+          "momentum": [
+            "RSI 59.61 in prime bullish acceleration zone (+35)",
+            "\u26a1 Fresh RSI(14) crossover above 50 triggered on completed candle (+25)",
+            "Volume Breakout 1.64x >= 1.2x 20-DMA (+15)",
+            "Outperforming NIFTY (+2.15%) (+10)"
+          ],
+          "fundamental": [
+            "Fundamental data unavailable on disk. (Verify via Screener.in)"
+          ],
+          "valuation": [
+            "Valuation ratios unavailable. Not fabricated."
+          ],
+          "risk": []
+        },
+        "disclaimer": "RESEARCH HEURISTICS DISCLAIMER: The Trend, Momentum, Quality, Valuation, and Risk scores are rule-based quantitative models intended solely for educational and research purposes. They do not constitute investment advice, financial planning, or guaranteed price predictions."
+      },
+      "reference_levels": {
+        "entry_reference": 1893.3,
+        "stop_loss_reference": 1812.15,
+        "target_1_reference": 2055.6,
+        "target_2_reference": 2136.75,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 81.15
+      }
+    }
+  ],
+  "top_swing_ranked": [
+    {
+      "symbol": "ICICIBANK",
+      "company_name": "ICICIBANK",
+      "sector": "General",
+      "price": 1389.4,
+      "change_percent": 3.8,
+      "swing_score": 92.0,
+      "classification": "STRONG SWING CANDIDATE",
+      "rsi_fresh_crossover": true,
+      "rsi_status": "Fresh Crossover Above 50",
+      "rsi_value": 60.9,
+      "ema_trend_bullish": true,
+      "ema_50": 1367.23,
+      "ema_200": 1357.13,
+      "volume_breakout": true,
+      "vol_ratio": 1.74,
+      "volume": 17114746,
+      "avg_volume_20d": 9844515,
+      "dist_from_52w_high_pct": 5.33,
+      "high_52w": 1467.63,
+      "sector_score": 60.0,
+      "candle_timestamp": "2026-10-15 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Validated Local CSV",
+      "passed_rules": [
+        {
+          "name": "RSI(14) Fresh Crossover > 50",
+          "detail": "Fresh bullish crossover! RSI crossed from 48.0 to 60.9.",
+          "points": 25.0
+        },
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b91389.4 > EMA50 \u20b91367.23 & EMA200 \u20b91357.13",
+          "points": 25.0
+        },
+        {
+          "name": "Strong Volume Surge",
+          "detail": "Volume is 1.74x 20-day average volume.",
+          "points": 20.0
+        },
+        {
+          "name": "Within 15% of 52-Week High",
+          "detail": "Trading 5.33% below 52-week high (\u20b91467.63).",
+          "points": 12.0
+        },
+        {
+          "name": "Sector Neutral",
+          "detail": "General sector score is 60.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [],
+      "reasons": [
+        "\u26a1 Fresh RSI(14) Bullish Crossover above 50 triggered on completed candle",
+        "\ud83d\udcc8 Strong uptrend: Price \u20b91389.4 trading above 50 EMA (\u20b91367.23) and 200 EMA (\u20b91357.13)",
+        "\ud83d\udd25 Massive volume breakout (1.74x 20-day average volume)",
+        "Within consolidation distance (5.33%) of 52-week high"
+      ],
+      "ranking": {
+        "composite_score": 93.6,
+        "trend_score": 100.0,
+        "momentum_score": 85.0,
+        "fundamental_score": null,
+        "valuation_score": null,
+        "risk_score": 0.0,
+        "safety_score": 100.0,
+        "has_fundamental_data": false,
+        "has_valuation_data": false,
+        "weights_used": {
+          "trend": 0.4285714285714286,
+          "momentum": 0.4285714285714286,
+          "safety": 0.14285714285714288
+        },
+        "breakdown": {
+          "trend": [
+            "Price > 50 EMA (+25)",
+            "Price > 200 EMA (+25)",
+            "50 EMA > 200 EMA Golden Alignment (+30)",
+            "Within 10% of 52W High (5.33%) (+20)"
+          ],
+          "momentum": [
+            "RSI 60.9 in prime bullish acceleration zone (+35)",
+            "\u26a1 Fresh RSI(14) crossover above 50 triggered on completed candle (+25)",
+            "Volume Breakout 1.74x >= 1.2x 20-DMA (+15)",
+            "Outperforming NIFTY (+4.28%) (+10)"
+          ],
+          "fundamental": [
+            "Fundamental data unavailable on disk. (Verify via Screener.in)"
+          ],
+          "valuation": [
+            "Valuation ratios unavailable. Not fabricated."
+          ],
+          "risk": []
+        },
+        "disclaimer": "RESEARCH HEURISTICS DISCLAIMER: The Trend, Momentum, Quality, Valuation, and Risk scores are rule-based quantitative models intended solely for educational and research purposes. They do not constitute investment advice, financial planning, or guaranteed price predictions."
+      },
+      "reference_levels": {
+        "entry_reference": 1389.4,
+        "stop_loss_reference": 1348.44,
+        "target_1_reference": 1471.32,
+        "target_2_reference": 1512.28,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 40.96
+      }
+    },
+    {
+      "symbol": "BHARTIARTL",
+      "company_name": "BHARTIARTL",
+      "sector": "General",
+      "price": 1854.0,
+      "change_percent": 3.31,
+      "swing_score": 77.0,
+      "classification": "CONFIRMED SWING SETUP",
+      "rsi_fresh_crossover": true,
+      "rsi_status": "Fresh Crossover Above 50",
+      "rsi_value": 59.61,
+      "ema_trend_bullish": false,
+      "ema_50": 1839.75,
+      "ema_200": 1879.53,
+      "volume_breakout": true,
+      "vol_ratio": 1.64,
+      "volume": 11273037,
+      "avg_volume_20d": 6858872,
+      "dist_from_52w_high_pct": 13.67,
+      "high_52w": 2147.47,
+      "sector_score": 60.0,
+      "candle_timestamp": "2026-10-15 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Validated Local CSV",
+      "passed_rules": [
+        {
+          "name": "RSI(14) Fresh Crossover > 50",
+          "detail": "Fresh bullish crossover! RSI crossed from 48.0 to 59.61.",
+          "points": 25.0
+        },
+        {
+          "name": "Strong Volume Surge",
+          "detail": "Volume is 1.64x 20-day average volume.",
+          "points": 20.0
+        },
+        {
+          "name": "Within 15% of 52-Week High",
+          "detail": "Trading 13.67% below 52-week high (\u20b92147.47).",
+          "points": 12.0
+        },
+        {
+          "name": "Sector Neutral",
+          "detail": "General sector score is 60.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b91854.0 vs EMA50 \u20b91839.75 / EMA200 \u20b91879.53",
+          "points": 10.0
+        }
+      ],
+      "reasons": [
+        "\u26a1 Fresh RSI(14) Bullish Crossover above 50 triggered on completed candle",
+        "\ud83d\udd25 Massive volume breakout (1.64x 20-day average volume)",
+        "Within consolidation distance (13.67%) of 52-week high"
+      ],
+      "ranking": {
+        "composite_score": 65.7,
+        "trend_score": 35.0,
+        "momentum_score": 85.0,
+        "fundamental_score": null,
+        "valuation_score": null,
+        "risk_score": 0.0,
+        "safety_score": 100.0,
+        "has_fundamental_data": false,
+        "has_valuation_data": false,
+        "weights_used": {
+          "trend": 0.4285714285714286,
+          "momentum": 0.4285714285714286,
+          "safety": 0.14285714285714288
+        },
+        "breakdown": {
+          "trend": [
+            "Price > 50 EMA (+25)",
+            "Price <= 200 EMA (0)",
+            "50 EMA <= 200 EMA (0)",
+            "Within 20% of 52W High (13.67%) (+10)"
+          ],
+          "momentum": [
+            "RSI 59.61 in prime bullish acceleration zone (+35)",
+            "\u26a1 Fresh RSI(14) crossover above 50 triggered on completed candle (+25)",
+            "Volume Breakout 1.64x >= 1.2x 20-DMA (+15)",
+            "Outperforming NIFTY (+2.15%) (+10)"
+          ],
+          "fundamental": [
+            "Fundamental data unavailable on disk. (Verify via Screener.in)"
+          ],
+          "valuation": [
+            "Valuation ratios unavailable. Not fabricated."
+          ],
+          "risk": []
+        },
+        "disclaimer": "RESEARCH HEURISTICS DISCLAIMER: The Trend, Momentum, Quality, Valuation, and Risk scores are rule-based quantitative models intended solely for educational and research purposes. They do not constitute investment advice, financial planning, or guaranteed price predictions."
+      },
+      "reference_levels": {
+        "entry_reference": 1893.3,
+        "stop_loss_reference": 1812.15,
+        "target_1_reference": 2055.6,
+        "target_2_reference": 2136.75,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 81.15
+      }
+    },
+    {
+      "symbol": "INFY",
+      "company_name": "INFY",
+      "sector": "General",
+      "price": 1110.0,
+      "change_percent": 2.02,
+      "swing_score": 51.0,
+      "classification": "SWING WATCHLIST",
+      "rsi_fresh_crossover": false,
+      "rsi_status": "Bullish Continuation (3 sessions above 50)",
+      "rsi_value": 68.4,
+      "ema_trend_bullish": false,
+      "ema_50": 1068.51,
+      "ema_200": 1191.17,
+      "volume_breakout": true,
+      "vol_ratio": 1.33,
+      "volume": 15957117,
+      "avg_volume_20d": 12029174,
+      "dist_from_52w_high_pct": 34.37,
+      "high_52w": 1691.4,
+      "sector_score": 60.0,
+      "candle_timestamp": "2026-10-15 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Validated Local CSV",
+      "passed_rules": [
+        {
+          "name": "RSI(14) Bullish Momentum",
+          "detail": "RSI is bullish at 68.4 (3 sessions above 50, not a fresh cross).",
+          "points": 16.0
+        },
+        {
+          "name": "Volume Expansion",
+          "detail": "Volume is 1.33x 20-day average volume.",
+          "points": 15.0
+        },
+        {
+          "name": "Sector Neutral",
+          "detail": "General sector score is 60.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b91110.0 vs EMA50 \u20b91068.51 / EMA200 \u20b91191.17",
+          "points": 10.0
+        },
+        {
+          "name": "Far from 52W High",
+          "detail": "34.37% below 52-week high. Overhead resistance present.",
+          "points": 0.0
+        }
+      ],
+      "reasons": [
+        "RSI(14) at 68.4 shows ongoing bullish momentum (3 days above 50)",
+        "Volume surge confirmed (1.33x 20-day average volume)"
+      ],
+      "ranking": {
+        "composite_score": 55.7,
+        "trend_score": 25.0,
+        "momentum_score": 80.0,
+        "fundamental_score": null,
+        "valuation_score": null,
+        "risk_score": 25.0,
+        "safety_score": 75.0,
+        "has_fundamental_data": false,
+        "has_valuation_data": false,
+        "weights_used": {
+          "trend": 0.4285714285714286,
+          "momentum": 0.4285714285714286,
+          "safety": 0.14285714285714288
+        },
+        "breakdown": {
+          "trend": [
+            "Price > 50 EMA (+25)",
+            "Price <= 200 EMA (0)",
+            "50 EMA <= 200 EMA (0)",
+            "Lags >20% below 52W High (34.37%) (0)"
+          ],
+          "momentum": [
+            "RSI 68.4 in prime bullish acceleration zone (+35)",
+            "RSI above 50 (continuation, not fresh) (+10)",
+            "Volume Breakout 1.33x >= 1.2x 20-DMA (+15)",
+            "Strong outperformance vs NIFTY (+6.03%) (+20)"
+          ],
+          "fundamental": [
+            "Fundamental data unavailable on disk. (Verify via Screener.in)"
+          ],
+          "valuation": [
+            "Valuation ratios unavailable. Not fabricated."
+          ],
+          "risk": [
+            "Significant lag (34.37% below 52W high) (+15 risk)",
+            "Moderate Volatility (Daily ATR 2.8%) (+10 risk)"
+          ]
+        },
+        "disclaimer": "RESEARCH HEURISTICS DISCLAIMER: The Trend, Momentum, Quality, Valuation, and Risk scores are rule-based quantitative models intended solely for educational and research purposes. They do not constitute investment advice, financial planning, or guaranteed price predictions."
+      },
+      "reference_levels": {
+        "entry_reference": 1126.7,
+        "stop_loss_reference": 1063.65,
+        "target_1_reference": 1252.8,
+        "target_2_reference": 1315.85,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 63.05
+      }
+    },
+    {
+      "symbol": "TCS",
+      "company_name": "TCS",
+      "sector": "General",
+      "price": 2350.0,
+      "change_percent": 1.96,
+      "swing_score": 48.0,
+      "classification": "AVOID / NOT CONFIRMED",
+      "rsi_fresh_crossover": false,
+      "rsi_status": "Bullish Continuation (3 sessions above 50)",
+      "rsi_value": 76.31,
+      "ema_trend_bullish": false,
+      "ema_50": 2194.61,
+      "ema_200": 2390.8,
+      "volume_breakout": true,
+      "vol_ratio": 1.86,
+      "volume": 9147977,
+      "avg_volume_20d": 4916031,
+      "dist_from_52w_high_pct": 28.13,
+      "high_52w": 3269.78,
+      "sector_score": 60.0,
+      "candle_timestamp": "2026-10-15 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Validated Local CSV",
+      "passed_rules": [
+        {
+          "name": "Strong Volume Surge",
+          "detail": "Volume is 1.86x 20-day average volume.",
+          "points": 20.0
+        },
+        {
+          "name": "Sector Neutral",
+          "detail": "General sector score is 60.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "RSI(14) Overbought Warning",
+          "detail": "RSI at 76.31 is overbought (> 75 exhaustion level).",
+          "points": 8.0
+        },
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b92350.0 vs EMA50 \u20b92194.61 / EMA200 \u20b92390.8",
+          "points": 10.0
+        },
+        {
+          "name": "Far from 52W High",
+          "detail": "28.13% below 52-week high. Overhead resistance present.",
+          "points": 0.0
+        }
+      ],
+      "reasons": [
+        "\u26a0\ufe0f RSI is extended at 76.31 (>75 overbought exhaustion)",
+        "\ud83d\udd25 Massive volume breakout (1.86x 20-day average volume)"
+      ],
+      "ranking": {
+        "composite_score": 40.7,
+        "trend_score": 25.0,
+        "momentum_score": 50.0,
+        "fundamental_score": null,
+        "valuation_score": null,
+        "risk_score": 40.0,
+        "safety_score": 60.0,
+        "has_fundamental_data": false,
+        "has_valuation_data": false,
+        "weights_used": {
+          "trend": 0.4285714285714286,
+          "momentum": 0.4285714285714286,
+          "safety": 0.14285714285714288
+        },
+        "breakdown": {
+          "trend": [
+            "Price > 50 EMA (+25)",
+            "Price <= 200 EMA (0)",
+            "50 EMA <= 200 EMA (0)",
+            "Lags >20% below 52W High (28.13%) (0)"
+          ],
+          "momentum": [
+            "RSI 76.31 extended / overbought exhaustion (+5)",
+            "RSI above 50 (continuation, not fresh) (+10)",
+            "Volume Breakout 1.86x >= 1.2x 20-DMA (+15)",
+            "Strong outperformance vs NIFTY (+9.05%) (+20)"
+          ],
+          "fundamental": [
+            "Fundamental data unavailable on disk. (Verify via Screener.in)"
+          ],
+          "valuation": [
+            "Valuation ratios unavailable. Not fabricated."
+          ],
+          "risk": [
+            "Elevated RSI (76.31): Caution on breakout (+15 risk)",
+            "Significant lag (28.13% below 52W high) (+15 risk)",
+            "Moderate Volatility (Daily ATR 3.0%) (+10 risk)"
+          ]
+        },
+        "disclaimer": "RESEARCH HEURISTICS DISCLAIMER: The Trend, Momentum, Quality, Valuation, and Risk scores are rule-based quantitative models intended solely for educational and research purposes. They do not constitute investment advice, financial planning, or guaranteed price predictions."
+      },
+      "reference_levels": {
+        "entry_reference": 2386.7,
+        "stop_loss_reference": 2243.53,
+        "target_1_reference": 2673.04,
+        "target_2_reference": 2816.21,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 143.17
+      }
+    },
+    {
+      "symbol": "RELIANCE",
+      "company_name": "RELIANCE",
+      "sector": "General",
+      "price": 1215.0,
+      "change_percent": 3.44,
+      "swing_score": 36.0,
+      "classification": "AVOID / NOT CONFIRMED",
+      "rsi_fresh_crossover": false,
+      "rsi_status": "Below 50 (Bearish Momentum)",
+      "rsi_value": 49.13,
+      "ema_trend_bullish": false,
+      "ema_50": 1243.59,
+      "ema_200": 1321.3,
+      "volume_breakout": true,
+      "vol_ratio": 1.68,
+      "volume": 23293551,
+      "avg_volume_20d": 13833654,
+      "dist_from_52w_high_pct": 24.27,
+      "high_52w": 1604.38,
+      "sector_score": 60.0,
+      "candle_timestamp": "2026-10-15 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Validated Local CSV",
+      "passed_rules": [
+        {
+          "name": "Strong Volume Surge",
+          "detail": "Volume is 1.68x 20-day average volume.",
+          "points": 20.0
+        },
+        {
+          "name": "Sector Neutral",
+          "detail": "General sector score is 60.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "RSI(14) Weak Momentum",
+          "detail": "RSI is 49.13 (below 50 neutral threshold).",
+          "points": 0.0
+        },
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b91215.0 vs EMA50 \u20b91243.59 / EMA200 \u20b91321.3",
+          "points": 0.0
+        },
+        {
+          "name": "Moderate Distance from 52W High",
+          "detail": "24.27% below 52-week high.",
+          "points": 6.0
+        }
+      ],
+      "reasons": [
+        "\ud83d\udd25 Massive volume breakout (1.68x 20-day average volume)"
+      ],
+      "ranking": {
+        "composite_score": 20.7,
+        "trend_score": 0.0,
+        "momentum_score": 15.0,
+        "fundamental_score": null,
+        "valuation_score": null,
+        "risk_score": 0.0,
+        "safety_score": 100.0,
+        "has_fundamental_data": false,
+        "has_valuation_data": false,
+        "weights_used": {
+          "trend": 0.4285714285714286,
+          "momentum": 0.4285714285714286,
+          "safety": 0.14285714285714288
+        },
+        "breakdown": {
+          "trend": [
+            "Price <= 50 EMA (0)",
+            "Price <= 200 EMA (0)",
+            "50 EMA <= 200 EMA (0)",
+            "Lags >20% below 52W High (24.27%) (0)"
+          ],
+          "momentum": [
+            "RSI 49.13 below 50 bearish momentum (0)",
+            "Volume Breakout 1.68x >= 1.2x 20-DMA (+15)",
+            "Underperforming NIFTY (-1.15%) (0)"
+          ],
+          "fundamental": [
+            "Fundamental data unavailable on disk. (Verify via Screener.in)"
+          ],
+          "valuation": [
+            "Valuation ratios unavailable. Not fabricated."
+          ],
+          "risk": []
+        },
+        "disclaimer": "RESEARCH HEURISTICS DISCLAIMER: The Trend, Momentum, Quality, Valuation, and Risk scores are rule-based quantitative models intended solely for educational and research purposes. They do not constitute investment advice, financial planning, or guaranteed price predictions."
+      },
+      "reference_levels": {
+        "entry_reference": 1253.4,
+        "stop_loss_reference": 1224.94,
+        "target_1_reference": 1310.32,
+        "target_2_reference": 1338.78,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 28.46
+      }
+    },
+    {
+      "symbol": "HDFCBANK",
+      "company_name": "HDFCBANK",
+      "sector": "General",
+      "price": 726.85,
+      "change_percent": 2.27,
+      "swing_score": 35.0,
+      "classification": "AVOID / NOT CONFIRMED",
+      "rsi_fresh_crossover": false,
+      "rsi_status": "Below 50 (Bearish Momentum)",
+      "rsi_value": 49.28,
+      "ema_trend_bullish": false,
+      "ema_50": 724.19,
+      "ema_200": 789.97,
+      "volume_breakout": true,
+      "vol_ratio": 1.21,
+      "volume": 37062824,
+      "avg_volume_20d": 30577153,
+      "dist_from_52w_high_pct": 27.6,
+      "high_52w": 1003.9,
+      "sector_score": 60.0,
+      "candle_timestamp": "2026-10-15 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Validated Local CSV",
+      "passed_rules": [
+        {
+          "name": "Volume Expansion",
+          "detail": "Volume is 1.21x 20-day average volume.",
+          "points": 15.0
+        },
+        {
+          "name": "Sector Neutral",
+          "detail": "General sector score is 60.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "RSI(14) Weak Momentum",
+          "detail": "RSI is 49.28 (below 50 neutral threshold).",
+          "points": 0.0
+        },
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b9726.85 vs EMA50 \u20b9724.19 / EMA200 \u20b9789.97",
+          "points": 10.0
+        },
+        {
+          "name": "Far from 52W High",
+          "detail": "27.6% below 52-week high. Overhead resistance present.",
+          "points": 0.0
+        }
+      ],
+      "reasons": [
+        "Volume surge confirmed (1.21x 20-day average volume)"
+      ],
+      "ranking": {
+        "composite_score": 33.6,
+        "trend_score": 25.0,
+        "momentum_score": 25.0,
+        "fundamental_score": null,
+        "valuation_score": null,
+        "risk_score": 15.0,
+        "safety_score": 85.0,
+        "has_fundamental_data": false,
+        "has_valuation_data": false,
+        "weights_used": {
+          "trend": 0.4285714285714286,
+          "momentum": 0.4285714285714286,
+          "safety": 0.14285714285714288
+        },
+        "breakdown": {
+          "trend": [
+            "Price > 50 EMA (+25)",
+            "Price <= 200 EMA (0)",
+            "50 EMA <= 200 EMA (0)",
+            "Lags >20% below 52W High (27.6%) (0)"
+          ],
+          "momentum": [
+            "RSI 49.28 below 50 bearish momentum (0)",
+            "Volume Breakout 1.21x >= 1.2x 20-DMA (+15)",
+            "Outperforming NIFTY (+3.12%) (+10)"
+          ],
+          "fundamental": [
+            "Fundamental data unavailable on disk. (Verify via Screener.in)"
+          ],
+          "valuation": [
+            "Valuation ratios unavailable. Not fabricated."
+          ],
+          "risk": [
+            "Significant lag (27.6% below 52W high) (+15 risk)"
+          ]
+        },
+        "disclaimer": "RESEARCH HEURISTICS DISCLAIMER: The Trend, Momentum, Quality, Valuation, and Risk scores are rule-based quantitative models intended solely for educational and research purposes. They do not constitute investment advice, financial planning, or guaranteed price predictions."
+      },
+      "reference_levels": {
+        "entry_reference": 749.3,
+        "stop_loss_reference": 713.33,
+        "target_1_reference": 821.24,
+        "target_2_reference": 857.21,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 35.97
+      }
+    },
+    {
+      "symbol": "LT",
+      "company_name": "LT",
+      "sector": "General",
+      "price": 3632.0,
+      "change_percent": -0.27,
+      "swing_score": 31.0,
+      "classification": "AVOID / NOT CONFIRMED",
+      "rsi_fresh_crossover": false,
+      "rsi_status": "Below 50 (Bearish Momentum)",
+      "rsi_value": 33.56,
+      "ema_trend_bullish": false,
+      "ema_50": 3849.0,
+      "ema_200": 3906.38,
+      "volume_breakout": true,
+      "vol_ratio": 1.43,
+      "volume": 2437735,
+      "avg_volume_20d": 1708706,
+      "dist_from_52w_high_pct": 17.4,
+      "high_52w": 4397.05,
+      "sector_score": 60.0,
+      "candle_timestamp": "2026-10-15 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Validated Local CSV",
+      "passed_rules": [
+        {
+          "name": "Volume Expansion",
+          "detail": "Volume is 1.43x 20-day average volume.",
+          "points": 15.0
+        },
+        {
+          "name": "Sector Neutral",
+          "detail": "General sector score is 60.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "RSI(14) Weak Momentum",
+          "detail": "RSI is 33.56 (below 50 neutral threshold).",
+          "points": 0.0
+        },
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b93632.0 vs EMA50 \u20b93849.0 / EMA200 \u20b93906.38",
+          "points": 0.0
+        },
+        {
+          "name": "Moderate Distance from 52W High",
+          "detail": "17.4% below 52-week high.",
+          "points": 6.0
+        }
+      ],
+      "reasons": [
+        "Volume surge confirmed (1.43x 20-day average volume)"
+      ],
+      "ranking": {
+        "composite_score": 25.0,
+        "trend_score": 10.0,
+        "momentum_score": 15.0,
+        "fundamental_score": null,
+        "valuation_score": null,
+        "risk_score": 0.0,
+        "safety_score": 100.0,
+        "has_fundamental_data": false,
+        "has_valuation_data": false,
+        "weights_used": {
+          "trend": 0.4285714285714286,
+          "momentum": 0.4285714285714286,
+          "safety": 0.14285714285714288
+        },
+        "breakdown": {
+          "trend": [
+            "Price <= 50 EMA (0)",
+            "Price <= 200 EMA (0)",
+            "50 EMA <= 200 EMA (0)",
+            "Within 20% of 52W High (17.4%) (+10)"
+          ],
+          "momentum": [
+            "RSI 33.56 below 50 bearish momentum (0)",
+            "Volume Breakout 1.43x >= 1.2x 20-DMA (+15)",
+            "Underperforming NIFTY (-4.15%) (0)"
+          ],
+          "fundamental": [
+            "Fundamental data unavailable on disk. (Verify via Screener.in)"
+          ],
+          "valuation": [
+            "Valuation ratios unavailable. Not fabricated."
+          ],
+          "risk": []
+        },
+        "disclaimer": "RESEARCH HEURISTICS DISCLAIMER: The Trend, Momentum, Quality, Valuation, and Risk scores are rule-based quantitative models intended solely for educational and research purposes. They do not constitute investment advice, financial planning, or guaranteed price predictions."
+      },
+      "reference_levels": {
+        "entry_reference": 3945.0,
+        "stop_loss_reference": 3791.26,
+        "target_1_reference": 4252.48,
+        "target_2_reference": 4406.22,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 153.74
+      }
+    },
+    {
+      "symbol": "SBIN",
+      "company_name": "SBIN",
+      "sector": "General",
+      "price": 960.0,
+      "change_percent": 0.53,
+      "swing_score": 24.0,
+      "classification": "AVOID / NOT CONFIRMED",
+      "rsi_fresh_crossover": false,
+      "rsi_status": "Below 50 (Bearish Momentum)",
+      "rsi_value": 42.46,
+      "ema_trend_bullish": false,
+      "ema_50": 993.38,
+      "ema_200": 1001.53,
+      "volume_breakout": false,
+      "vol_ratio": 0.97,
+      "volume": 8601199,
+      "avg_volume_20d": 8851508,
+      "dist_from_52w_high_pct": 20.85,
+      "high_52w": 1212.84,
+      "sector_score": 60.0,
+      "candle_timestamp": "2026-10-15 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Validated Local CSV",
+      "passed_rules": [
+        {
+          "name": "Sector Neutral",
+          "detail": "General sector score is 60.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "RSI(14) Weak Momentum",
+          "detail": "RSI is 42.46 (below 50 neutral threshold).",
+          "points": 0.0
+        },
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b9960.0 vs EMA50 \u20b9993.38 / EMA200 \u20b91001.53",
+          "points": 0.0
+        },
+        {
+          "name": "Normal Volume",
+          "detail": "Volume ratio 0.97x is below the 1.2x surge mark.",
+          "points": 8.0
+        },
+        {
+          "name": "Moderate Distance from 52W High",
+          "detail": "20.85% below 52-week high.",
+          "points": 6.0
+        }
+      ],
+      "reasons": [],
+      "ranking": {
+        "composite_score": 14.3,
+        "trend_score": 0.0,
+        "momentum_score": 0.0,
+        "fundamental_score": null,
+        "valuation_score": null,
+        "risk_score": 0.0,
+        "safety_score": 100.0,
+        "has_fundamental_data": false,
+        "has_valuation_data": false,
+        "weights_used": {
+          "trend": 0.4285714285714286,
+          "momentum": 0.4285714285714286,
+          "safety": 0.14285714285714288
+        },
+        "breakdown": {
+          "trend": [
+            "Price <= 50 EMA (0)",
+            "Price <= 200 EMA (0)",
+            "50 EMA <= 200 EMA (0)",
+            "Lags >20% below 52W High (20.85%) (0)"
+          ],
+          "momentum": [
+            "RSI 42.46 below 50 bearish momentum (0)",
+            "Volume 0.97x < 1.2x 20-DMA (0)",
+            "Underperforming NIFTY (-1.73%) (0)"
+          ],
+          "fundamental": [
+            "Fundamental data unavailable on disk. (Verify via Screener.in)"
+          ],
+          "valuation": [
+            "Valuation ratios unavailable. Not fabricated."
+          ],
+          "risk": []
+        },
+        "disclaimer": "RESEARCH HEURISTICS DISCLAIMER: The Trend, Momentum, Quality, Valuation, and Risk scores are rule-based quantitative models intended solely for educational and research purposes. They do not constitute investment advice, financial planning, or guaranteed price predictions."
+      },
+      "reference_levels": {
+        "entry_reference": 1000.9,
+        "stop_loss_reference": 978.48,
+        "target_1_reference": 1045.74,
+        "target_2_reference": 1068.16,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 22.42
+      }
+    },
+    {
+      "symbol": "ITC",
+      "company_name": "ITC",
+      "sector": "General",
+      "price": 263.9,
+      "change_percent": 0.92,
+      "swing_score": 18.0,
+      "classification": "AVOID / NOT CONFIRMED",
+      "rsi_fresh_crossover": false,
+      "rsi_status": "Below 50 (Bearish Momentum)",
+      "rsi_value": 46.9,
+      "ema_trend_bullish": false,
+      "ema_50": 268.02,
+      "ema_200": 295.78,
+      "volume_breakout": false,
+      "vol_ratio": 1.14,
+      "volume": 22777881,
+      "avg_volume_20d": 19974656,
+      "dist_from_52w_high_pct": 35.09,
+      "high_52w": 406.57,
+      "sector_score": 60.0,
+      "candle_timestamp": "2026-10-15 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Validated Local CSV",
+      "passed_rules": [
+        {
+          "name": "Sector Neutral",
+          "detail": "General sector score is 60.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "RSI(14) Weak Momentum",
+          "detail": "RSI is 46.9 (below 50 neutral threshold).",
+          "points": 0.0
+        },
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b9263.9 vs EMA50 \u20b9268.02 / EMA200 \u20b9295.78",
+          "points": 0.0
+        },
+        {
+          "name": "Normal Volume",
+          "detail": "Volume ratio 1.14x is below the 1.2x surge mark.",
+          "points": 8.0
+        },
+        {
+          "name": "Far from 52W High",
+          "detail": "35.09% below 52-week high. Overhead resistance present.",
+          "points": 0.0
+        }
+      ],
+      "reasons": [],
+      "ranking": {
+        "composite_score": 12.9,
+        "trend_score": 0.0,
+        "momentum_score": 10.0,
+        "fundamental_score": null,
+        "valuation_score": null,
+        "risk_score": 40.0,
+        "safety_score": 60.0,
+        "has_fundamental_data": false,
+        "has_valuation_data": false,
+        "weights_used": {
+          "trend": 0.4285714285714286,
+          "momentum": 0.4285714285714286,
+          "safety": 0.14285714285714288
+        },
+        "breakdown": {
+          "trend": [
+            "Price <= 50 EMA (0)",
+            "Price <= 200 EMA (0)",
+            "50 EMA <= 200 EMA (0)",
+            "Lags >20% below 52W High (35.09%) (0)"
+          ],
+          "momentum": [
+            "RSI 46.9 below 50 bearish momentum (0)",
+            "Volume 1.14x < 1.2x 20-DMA (0)",
+            "Outperforming NIFTY (+0.31%) (+10)"
+          ],
+          "fundamental": [
+            "Fundamental data unavailable on disk. (Verify via Screener.in)"
+          ],
+          "valuation": [
+            "Valuation ratios unavailable. Not fabricated."
+          ],
+          "risk": [
+            "Deep Downtrend (35.09% below 52W high): Structural weakness (+30 risk)",
+            "Moderate Volatility (Daily ATR 2.6%) (+10 risk)"
+          ]
+        },
+        "disclaimer": "RESEARCH HEURISTICS DISCLAIMER: The Trend, Momentum, Quality, Valuation, and Risk scores are rule-based quantitative models intended solely for educational and research purposes. They do not constitute investment advice, financial planning, or guaranteed price predictions."
+      },
+      "reference_levels": {
+        "entry_reference": 271.05,
+        "stop_loss_reference": 264.0,
+        "target_1_reference": 285.15,
+        "target_2_reference": 292.2,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 7.05
+      }
+    },
+    {
+      "symbol": "MARUTI",
+      "company_name": "MARUTI",
+      "sector": "General",
+      "price": 11445.0,
+      "change_percent": 2.39,
+      "swing_score": 18.0,
+      "classification": "AVOID / NOT CONFIRMED",
+      "rsi_fresh_crossover": false,
+      "rsi_status": "Below 50 (Bearish Momentum)",
+      "rsi_value": 38.0,
+      "ema_trend_bullish": false,
+      "ema_50": 12382.57,
+      "ema_200": 13544.22,
+      "volume_breakout": false,
+      "vol_ratio": 1.13,
+      "volume": 510004,
+      "avg_volume_20d": 451202,
+      "dist_from_52w_high_pct": 33.45,
+      "high_52w": 17197.29,
+      "sector_score": 60.0,
+      "candle_timestamp": "2026-10-15 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Validated Local CSV",
+      "passed_rules": [
+        {
+          "name": "Sector Neutral",
+          "detail": "General sector score is 60.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "RSI(14) Weak Momentum",
+          "detail": "RSI is 38.0 (below 50 neutral threshold).",
+          "points": 0.0
+        },
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b911445.0 vs EMA50 \u20b912382.57 / EMA200 \u20b913544.22",
+          "points": 0.0
+        },
+        {
+          "name": "Normal Volume",
+          "detail": "Volume ratio 1.13x is below the 1.2x surge mark.",
+          "points": 8.0
+        },
+        {
+          "name": "Far from 52W High",
+          "detail": "33.45% below 52-week high. Overhead resistance present.",
+          "points": 0.0
+        }
+      ],
+      "reasons": [],
+      "ranking": {
+        "composite_score": 12.1,
+        "trend_score": 0.0,
+        "momentum_score": 0.0,
+        "fundamental_score": null,
+        "valuation_score": null,
+        "risk_score": 15.0,
+        "safety_score": 85.0,
+        "has_fundamental_data": false,
+        "has_valuation_data": false,
+        "weights_used": {
+          "trend": 0.4285714285714286,
+          "momentum": 0.4285714285714286,
+          "safety": 0.14285714285714288
+        },
+        "breakdown": {
+          "trend": [
+            "Price <= 50 EMA (0)",
+            "Price <= 200 EMA (0)",
+            "50 EMA <= 200 EMA (0)",
+            "Lags >20% below 52W High (33.45%) (0)"
+          ],
+          "momentum": [
+            "RSI 38.0 below 50 bearish momentum (0)",
+            "Volume 1.13x < 1.2x 20-DMA (0)",
+            "Underperforming NIFTY (-6.06%) (0)"
+          ],
+          "fundamental": [
+            "Fundamental data unavailable on disk. (Verify via Screener.in)"
+          ],
+          "valuation": [
+            "Valuation ratios unavailable. Not fabricated."
+          ],
+          "risk": [
+            "Significant lag (33.45% below 52W high) (+15 risk)"
+          ]
+        },
+        "disclaimer": "RESEARCH HEURISTICS DISCLAIMER: The Trend, Momentum, Quality, Valuation, and Risk scores are rule-based quantitative models intended solely for educational and research purposes. They do not constitute investment advice, financial planning, or guaranteed price predictions."
+      },
+      "reference_levels": {
+        "entry_reference": 12458.0,
+        "stop_loss_reference": 12196.83,
+        "target_1_reference": 12980.34,
+        "target_2_reference": 13241.51,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 261.17
+      }
+    }
+  ],
+  "monthly_summary": {
+    "buy_candidates": 0,
+    "hold_candidates": 1,
+    "exit_reviews": 9
+  },
+  "disclaimer": "RESEARCH HEURISTICS DISCLAIMER: The Trend, Momentum, Quality, Valuation, and Risk scores are rule-based quantitative models intended solely for educational and research purposes. They do not constitute investment advice, financial planning, or guaranteed price predictions."
+}

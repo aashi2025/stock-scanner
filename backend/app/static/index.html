@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Indian Stock Research Tool | Upstox Powered</title>
+    
+    <!-- PWA Settings -->
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="StockResearch">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#075985',
+                            800: '#0c4a6e',
+                            900: '#0f172a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Chart.js CDN for responsive technical charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Header & Upstox Status Bar -->
+    <header class="sticky top-0 z-40 bg-slate-950/95 backdrop-blur border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-purple-600 to-brand-500 text-white p-2 rounded-xl shadow-lg shadow-brand-500/20">
+                    <i data-lucide="trending-up" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-base md:text-lg leading-tight tracking-tight text-white flex items-center gap-2">
+                        Indian Stock Research Tool
+                        <span class="text-[11px] bg-purple-500/20 text-purple-300 font-semibold px-2 py-0.5 rounded-full border border-purple-500/30 flex items-center gap-1">
+                            <span class="w-1.5 h-1.5 rounded-full bg-purple-400"></span> Upstox API
+                        </span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Swing Trading & Monthly Fundamental Research (₹0/mo)</p>
+                </div>
+            </div>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden lg:flex items-center space-x-1 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-link active px-3 py-2 rounded-lg font-medium transition flex items-center gap-1.5">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+                </button>
+                <button onclick="switchTab('swing')" id="nav-swing" class="nav-link px-3 py-2 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
+                    <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i> Swing Scanner
+                </button>
+                <button onclick="switchTab('monthly')" id="nav-monthly" class="nav-link px-3 py-2 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
+                    <i data-lucide="calendar" class="w-4 h-4 text-emerald-400"></i> Monthly Research
+                </button>
+                <button onclick="switchTab('sectors')" id="nav-sectors" class="nav-link px-3 py-2 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
+                    <i data-lucide="pie-chart" class="w-4 h-4 text-blue-400"></i> Sectors
+                </button>
+                <button onclick="switchTab('backtest')" id="nav-backtest" class="nav-link px-3 py-2 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
+                    <i data-lucide="history" class="w-4 h-4 text-indigo-400"></i> Backtest
+                </button>
+                <button onclick="switchTab('settings')" id="nav-settings" class="nav-link px-3 py-2 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
+                    <i data-lucide="settings" class="w-4 h-4 text-slate-400"></i> Upstox & Settings
+                </button>
+            </nav>
+
+            <!-- Quick Action Buttons -->
+            <div class="flex items-center space-x-2">
+                <button onclick="openUpstoxModal()" id="btn-upstox-status" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium px-3 py-2 rounded-xl border border-slate-700 flex items-center gap-1.5 transition">
+                    <span class="w-2 h-2 rounded-full bg-amber-400" id="upstox-dot"></span>
+                    <span id="upstox-badge-label" class="hidden sm:inline">Upstox Status</span>
+                </button>
+                <button onclick="runGlobalScan()" class="bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs px-3.5 py-2 rounded-xl shadow-lg shadow-brand-500/20 transition flex items-center gap-1.5">
+                    <i data-lucide="play" class="w-3.5 h-3.5" id="scan-btn-icon"></i>
+                    <span>Run Scan</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Upstox Status & Data Freshness Ribbon -->
+        <div id="data-freshness-bar" class="bg-slate-900/90 border-t border-slate-800 px-4 py-1.5 text-xs text-slate-400 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" id="data-source-badge">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+                    <span id="data-source-text">Upstox API v2 (Verified Historical Candle Mode)</span>
+                </span>
+                <span id="data-timestamp-text" class="text-[11px] text-slate-400">Last Candle: Loading...</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-[11px] text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700">
+                    Rate Limit: <strong class="text-slate-200">50 req/s safe</strong> (Free Tier)
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-3 md:p-6 pb-24 md:pb-8">
+
+        <!-- ALERT TOAST CONTAINER -->
+        <div id="toast-container" class="fixed top-24 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+        <!-- TAB 1: DASHBOARD -->
+        <section id="tab-dashboard" class="tab-content space-y-6">
+            <!-- Market Status Banner -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">NIFTY 50 Market Regime</span>
+                        <span id="mkt-score-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-300">--</span>
+                    </div>
+                    <div class="my-4">
+                        <div class="text-3xl font-extrabold text-white flex items-baseline gap-2">
+                            <span id="mkt-score-val">0</span><span class="text-sm font-normal text-slate-400">/ 100</span>
+                        </div>
+                        <div id="mkt-class-val" class="text-sm font-semibold text-emerald-400 mt-1">Analyzing market...</div>
+                    </div>
+                    <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                        <div id="mkt-score-bar" class="bg-emerald-500 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Sector Performance</span>
+                        <i data-lucide="pie-chart" class="w-4 h-4 text-brand-400"></i>
+                    </div>
+                    <div class="my-3 grid grid-cols-3 gap-2 text-center">
+                        <div class="bg-emerald-950/40 border border-emerald-800/40 p-2 rounded-xl">
+                            <div class="text-xl font-bold text-emerald-400" id="dash-bullish-sectors-count">0</div>
+                            <div class="text-[11px] text-emerald-300/80">Bullish</div>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 p-2 rounded-xl">
+                            <div class="text-xl font-bold text-amber-400" id="dash-neutral-sectors-count">0</div>
+                            <div class="text-[11px] text-amber-300/80">Neutral</div>
+                        </div>
+                        <div class="bg-rose-950/40 border border-rose-800/40 p-2 rounded-xl">
+                            <div class="text-xl font-bold text-rose-400" id="dash-bearish-sectors-count">0</div>
+                            <div class="text-[11px] text-rose-300/80">Bearish</div>
+                        </div>
+                    </div>
+                    <div class="text-xs text-slate-400 flex items-center justify-between">
+                        <span>Leading Sector:</span>
+                        <span class="font-semibold text-white" id="dash-top-sector">--</span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Upstox Real Signals</span>
+                        <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+                    </div>
+                    <div class="my-3 space-y-1">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-slate-400">⚡ RSI(14) Fresh Crossover > 50:</span>
+                            <span class="font-bold text-amber-400" id="dash-fresh-cross-count">0 Stocks</span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-slate-400">🔥 Volume Breakouts (≥1.2x):</span>
+                            <span class="font-bold text-emerald-400" id="dash-vol-breakout-count">0 Stocks</span>
+                        </div>
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-slate-400">🟢 Monthly Buy Candidates:</span>
+                            <span class="font-bold text-brand-400" id="dash-monthly-buy-count">0 Stocks</span>
+                        </div>
+                    </div>
+                    <button onclick="switchTab('swing')" class="text-xs font-semibold text-brand-400 hover:text-brand-300 flex items-center gap-1">
+                        Open Swing Scanner <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Top Setups Feed -->
+            <div class="bg-slate-950 rounded-2xl border border-slate-800 shadow-xl overflow-hidden">
+                <div class="p-4 md:p-5 border-b border-slate-800 flex items-center justify-between">
+                    <div>
+                        <h2 class="font-bold text-base text-white flex items-center gap-2">
+                            <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i> High-Conviction Market Candidates
+                        </h2>
+                        <p class="text-xs text-slate-400">Real Upstox historical candles evaluated across trend, volume, and momentum</p>
+                    </div>
+                    <span class="text-xs text-slate-400" id="top-setups-count-badge">0 Candidates</span>
+                </div>
+                <div id="top-setups-list" class="divide-y divide-slate-800/60">
+                    <div class="p-8 text-center text-slate-500">
+                        <i data-lucide="loader-2" class="w-8 h-8 animate-spin mx-auto mb-2 text-brand-500"></i>
+                        Fetching Upstox market data...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: SWING SCANNER (Requirement #2) -->
+        <section id="tab-swing" class="tab-content hidden space-y-6">
+            <!-- Swing Control Panel -->
+            <div class="bg-slate-950 p-4 md:p-5 rounded-2xl border border-slate-800 shadow-xl space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h2 class="font-bold text-base text-white flex items-center gap-2">
+                            <i data-lucide="zap" class="w-5 h-5 text-amber-400"></i> Swing Trading Scanner (Upstox Real Data)
+                        </h2>
+                        <p class="text-xs text-slate-400">Evaluates strictly on COMPLETED candles. Fresh RSI 50 crossover, EMA 50/200 uptrend, Volume breakout & 52W high distance.</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                        <select id="swing-universe-select" class="bg-slate-900 border border-slate-700 text-white text-xs rounded-xl px-3 py-2 outline-none">
+                            <option value="NIFTY 50">NIFTY 50</option>
+                            <option value="NIFTY 100">NIFTY 100</option>
+                            <option value="Midcap">NIFTY Midcap</option>
+                            <option value="Smallcap">NIFTY Smallcap</option>
+                        </select>
+                        <label class="text-xs text-slate-300 flex items-center gap-1.5 cursor-pointer bg-slate-900 px-3 py-2 rounded-xl border border-slate-700">
+                            <input type="checkbox" id="swing-fresh-only" class="rounded bg-slate-800 border-slate-600 text-brand-500">
+                            ⚡ Only Fresh RSI 50 Crossovers
+                        </label>
+                        <button onclick="runSwingScan()" class="bg-amber-600 hover:bg-amber-500 text-white font-semibold text-xs px-4 py-2 rounded-xl shadow transition flex items-center gap-1.5">
+                            <i data-lucide="refresh-cw" class="w-3.5 h-3.5" id="swing-btn-icon"></i> Run Swing Scan
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Swing Results Grid -->
+            <div id="swing-results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="col-span-full p-8 text-center text-slate-500 bg-slate-950 rounded-2xl border border-slate-800">
+                    Click 'Run Swing Scan' to scan stocks with Upstox API.
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: MONTHLY STOCK RESEARCH (Requirement #3) -->
+        <section id="tab-monthly" class="tab-content hidden space-y-6">
+            <div class="bg-slate-950 p-4 md:p-5 rounded-2xl border border-slate-800 shadow-xl space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h2 class="font-bold text-base text-white flex items-center gap-2">
+                            <i data-lucide="calendar" class="w-5 h-5 text-emerald-400"></i> Monthly Stock Research Engine
+                        </h2>
+                        <p class="text-xs text-slate-400">Combines multi-month Upstox price trends with verified financials (ROCE, ROE, Debt/Equity, Growth, Valuation).</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <select id="monthly-universe-select" class="bg-slate-900 border border-slate-700 text-white text-xs rounded-xl px-3 py-2 outline-none">
+                            <option value="NIFTY 50">NIFTY 50</option>
+                            <option value="NIFTY 100">NIFTY 100</option>
+                            <option value="Midcap">NIFTY Midcap</option>
+                        </select>
+                        <button onclick="runMonthlyScan()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs px-4 py-2 rounded-xl shadow transition flex items-center gap-1.5">
+                            <i data-lucide="search" class="w-3.5 h-3.5"></i> Run Monthly Research
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Verified Fundamentals Disclaimer Badge -->
+                <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 text-xs text-slate-300 flex items-center gap-2">
+                    <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400 flex-shrink-0"></i>
+                    <span><strong>Transparent Data Policy:</strong> Price action comes directly from Upstox API v2. Fundamentals are sourced via Upstox Fundamentals API when authenticated, with verified public financials fallback. No metrics are ever faked or simulated.</span>
+                </div>
+            </div>
+
+            <!-- Categorized Monthly Sections -->
+            <div class="space-y-6">
+                <!-- 1. BUY CANDIDATES -->
+                <div>
+                    <h3 class="text-sm font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2 mb-3">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Buy Candidates (<span id="monthly-buy-count">0</span>)
+                    </h3>
+                    <div id="monthly-buy-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Dynamic cards -->
+                    </div>
+                </div>
+
+                <!-- 2. HOLD CANDIDATES -->
+                <div class="pt-4 border-t border-slate-800">
+                    <h3 class="text-sm font-bold text-blue-400 uppercase tracking-wider flex items-center gap-2 mb-3">
+                        <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span> Hold Candidates (<span id="monthly-hold-count">0</span>)
+                    </h3>
+                    <div id="monthly-hold-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Dynamic cards -->
+                    </div>
+                </div>
+
+                <!-- 3. EXIT REVIEWS -->
+                <div class="pt-4 border-t border-slate-800">
+                    <h3 class="text-sm font-bold text-rose-400 uppercase tracking-wider flex items-center gap-2 mb-3">
+                        <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span> Exit Reviews (<span id="monthly-exit-count">0</span>)
+                    </h3>
+                    <div id="monthly-exit-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Dynamic cards -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: SECTORS -->
+        <section id="tab-sectors" class="tab-content hidden space-y-6">
+            <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 shadow-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="font-bold text-base text-white">NSE Sector Trend Engine</h2>
+                        <p class="text-xs text-slate-400">Sector index measurements (50/200 DMA, RSI, Relative Strength vs NIFTY 50 via Upstox)</p>
+                    </div>
+                </div>
+                <div id="sectors-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Sector Cards -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: BACKTEST (Requirement #4) -->
+        <section id="tab-backtest" class="tab-content hidden space-y-6">
+            <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 shadow-xl space-y-6">
+                <div>
+                    <h2 class="font-bold text-base text-white flex items-center gap-2">
+                        <i data-lucide="history" class="w-5 h-5 text-indigo-400"></i> Historical Confirmation Backtesting Engine
+                    </h2>
+                    <p class="text-xs text-slate-400">Point-in-time signal simulation with realistic slippage (0.2%) and STT/brokerage transaction costs (0.25%).</p>
+                </div>
+
+                <!-- Backtest Form -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                    <div>
+                        <label class="block font-semibold text-slate-400 mb-1">Universe</label>
+                        <select id="bt-universe" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-2.5">
+                            <option value="NIFTY 50">NIFTY 50</option>
+                            <option value="NIFTY 100">NIFTY 100</option>
+                            <option value="Midcap">NIFTY Midcap</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-400 mb-1">Start Date</label>
+                        <input type="date" id="bt-start" value="2024-01-01" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-2.5">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-400 mb-1">Stop Loss %</label>
+                        <input type="number" id="bt-stop" value="5.0" step="0.5" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-2.5">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-400 mb-1">Target %</label>
+                        <input type="number" id="bt-target" value="10.0" step="1.0" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-2.5">
+                    </div>
+                </div>
+
+                <button onclick="runBacktestSimulation()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow transition flex items-center gap-2">
+                    <i data-lucide="play-circle" class="w-4 h-4"></i> Run Historical Backtest
+                </button>
+
+                <!-- Backtest Results Display -->
+                <div id="backtest-results-area" class="hidden space-y-6 pt-4 border-t border-slate-800">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                            <div class="text-xs text-slate-400">Total Trades</div>
+                            <div class="text-xl font-bold text-white mt-1" id="bt-total-trades">0</div>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                            <div class="text-xs text-slate-400">Win Rate</div>
+                            <div class="text-xl font-bold text-emerald-400 mt-1" id="bt-win-rate">0%</div>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                            <div class="text-xs text-slate-400">Profit Factor</div>
+                            <div class="text-xl font-bold text-brand-400 mt-1" id="bt-profit-factor">0.0</div>
+                        </div>
+                        <div class="bg-slate-900 p-4 rounded-xl border border-slate-800">
+                            <div class="text-xs text-slate-400">Max Drawdown</div>
+                            <div class="text-xl font-bold text-rose-400 mt-1" id="bt-max-dd">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: UPSTOX & SETTINGS (Requirement #1 & #6) -->
+        <section id="tab-settings" class="tab-content hidden space-y-6">
+            <div class="bg-slate-950 p-5 rounded-2xl border border-slate-800 shadow-xl space-y-6">
+                <div>
+                    <h2 class="font-bold text-base text-white flex items-center gap-2">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-purple-400"></i> Upstox API Integration & Settings
+                    </h2>
+                    <p class="text-xs text-slate-400">Upstox API v2 is 100% Free (₹0/mo). Manage your authentication and instruments below.</p>
+                </div>
+
+                <!-- Upstox Status Box -->
+                <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-slate-300">Current Connection Mode:</span>
+                        <span id="settings-mode-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            Public EOD Mode
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400" id="settings-token-reason">Operating in free EOD historical candle mode.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                        <button onclick="loginWithUpstoxOAuth()" class="bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow transition flex items-center justify-center gap-2">
+                            <i data-lucide="log-in" class="w-4 h-4"></i> Login with Upstox (1-Click OAuth)
+                        </button>
+                        <button onclick="openTokenPasteModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs px-4 py-2.5 rounded-xl border border-slate-700 transition flex items-center justify-center gap-2">
+                            <i data-lucide="key" class="w-4 h-4"></i> Paste Daily Access Token Manually
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Exact Redirect URL Box for Upstox Console -->
+                <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-700/80 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label class="block font-bold text-slate-200 text-xs flex items-center gap-1.5">
+                            <i data-lucide="link" class="w-4 h-4 text-emerald-400"></i>
+                            Upstox Developer Console में भरने के लिए Exact Redirect URL:
+                        </label>
+                        <span class="text-[10px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 font-semibold">
+                            Port Auto-Matched
+                        </span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="display-redirect-url" readonly value="http://localhost:8000/api/upstox/callback" class="bg-slate-950 border border-slate-600 text-xs font-mono text-emerald-400 font-semibold rounded-xl p-3 flex-1 select-all outline-none">
+                        <button onclick="copyRedirectUrl()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs px-4 py-3 rounded-xl shadow transition flex items-center gap-1.5 flex-shrink-0">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                            <span>Copy URL</span>
+                        </button>
+                    </div>
+                    <p class="text-[11px] text-slate-400">
+                        Upstox Developer Console (<a href="https://account.upstox.com/developer/apps" target="_blank" class="text-brand-400 underline">account.upstox.com/developer/apps</a>) में New App बनाते समय <strong>'Redirect URL'</strong> के खाने में ठीक यही लिंक पेस्ट करें।
+                    </p>
+                </div>
+
+                <!-- API Credentials Config -->
+                <div class="space-y-4 text-xs">
+                    <div>
+                        <label class="block font-semibold text-slate-300 mb-1">Upstox API Key (Client ID)</label>
+                        <input type="text" id="cfg-upstox-api-key" placeholder="Enter your free Upstox API Key" class="bg-slate-900 border border-slate-700 text-white rounded-xl p-3 w-full">
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-300 mb-1">Upstox API Secret</label>
+                        <input type="password" id="cfg-upstox-api-secret" placeholder="Enter your free Upstox API Secret" class="bg-slate-900 border border-slate-700 text-white rounded-xl p-3 w-full">
+                    </div>
+
+
+                    <div class="flex items-center gap-3 pt-2">
+                        <button onclick="saveUpstoxCredentials()" class="bg-brand-600 hover:bg-brand-500 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow">
+                            Save Credentials in .env
+                        </button>
+                        <button onclick="syncInstruments()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs px-4 py-2.5 rounded-xl border border-slate-700">
+                            Sync NSE Instruments Master
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- UPSTOX STATUS & TOKEN MODAL -->
+    <div id="upstox-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full shadow-2xl p-6 relative">
+            <button onclick="closeUpstoxModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h3 class="font-bold text-base text-white flex items-center gap-2 mb-2">
+                <i data-lucide="shield-check" class="w-5 h-5 text-purple-400"></i> Upstox API Connection
+            </h3>
+            <p class="text-xs text-slate-400 mb-4" id="modal-upstox-desc">
+                Paste your daily Upstox Access Token or log in via OAuth.
+            </p>
+            <div class="space-y-3">
+                <textarea id="modal-token-input" rows="3" placeholder="eyJ0eXAiOiJKV1QiLC..." class="w-full bg-slate-950 border border-slate-700 text-xs text-white rounded-xl p-3 font-mono"></textarea>
+                <button onclick="submitManualToken()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold text-xs py-2.5 rounded-xl shadow transition">
+                    Save and Activate Token
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- STOCK DETAIL MODAL -->
+    <div id="stock-detail-modal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl p-6 relative">
+            <button onclick="closeStockDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white p-2 rounded-full bg-slate-800">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div id="modal-stock-content" class="space-y-6"></div>
+        </div>
+    </div>
+
+    <!-- MOBILE BOTTOM NAVIGATION (Android Responsive PWA) -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur border-t border-slate-800 py-2 px-2 flex items-center justify-around text-[10px]">
+        <button onclick="switchTab('dashboard')" id="mob-dashboard" class="mob-link active flex flex-col items-center gap-1 text-brand-400">
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i> Dashboard
+        </button>
+        <button onclick="switchTab('swing')" id="mob-swing" class="mob-link flex flex-col items-center gap-1 text-slate-400">
+            <i data-lucide="zap" class="w-5 h-5"></i> Swing
+        </button>
+        <button onclick="switchTab('monthly')" id="mob-monthly" class="mob-link flex flex-col items-center gap-1 text-slate-400">
+            <i data-lucide="calendar" class="w-5 h-5"></i> Monthly
+        </button>
+        <button onclick="switchTab('sectors')" id="mob-sectors" class="mob-link flex flex-col items-center gap-1 text-slate-400">
+            <i data-lucide="pie-chart" class="w-5 h-5"></i> Sectors
+        </button>
+        <button onclick="switchTab('settings')" id="mob-settings" class="mob-link flex flex-col items-center gap-1 text-slate-400">
+            <i data-lucide="settings" class="w-5 h-5"></i> Settings
+        </button>
+    </nav>
+
+    <script src="/static/app.js"></script>
+    <script>
+        // Register PWA Service Worker for Mobile
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/static/sw.js').then(reg => {
+                console.log('PWA ServiceWorker registered successfully');
+            }).catch(err => {
+                console.log('PWA ServiceWorker registration failed: ', err);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,431 @@
+{
+  "timestamp": "2026-10-15 22:27:40",
+  "provider": "Upstox API v2 (Verified Historical Candle Mode)",
+  "market_score": 0.0,
+  "top_swing_candidates": [
+    {
+      "symbol": "TECHM",
+      "company_name": "Tech Mahindra Ltd.",
+      "sector": "IT",
+      "price": 1575.2,
+      "change_percent": 2.05,
+      "swing_score": 86.0,
+      "classification": "STRONG SWING CANDIDATE",
+      "rsi_fresh_crossover": true,
+      "rsi_status": "Fresh Crossover Above 50",
+      "rsi_value": 53.06,
+      "ema_trend_bullish": true,
+      "ema_50": 1546.83,
+      "ema_200": 1517.72,
+      "volume_breakout": true,
+      "vol_ratio": 1.64,
+      "volume": 3651697,
+      "avg_volume_20d": 2227482,
+      "dist_from_52w_high_pct": 15.04,
+      "high_52w": 1854.0,
+      "sector_score": 55.0,
+      "candle_timestamp": "2026-10-14 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Upstox API v2",
+      "passed_rules": [
+        {
+          "name": "RSI(14) Fresh Crossover > 50",
+          "detail": "Fresh bullish crossover! RSI crossed from 48.0 to 53.06.",
+          "points": 25.0
+        },
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b91575.2 > EMA50 \u20b91546.83 & EMA200 \u20b91517.72",
+          "points": 25.0
+        },
+        {
+          "name": "Strong Volume Surge",
+          "detail": "Volume is 1.64x 20-day average volume.",
+          "points": 20.0
+        },
+        {
+          "name": "Sector Neutral",
+          "detail": "IT sector score is 55.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "Moderate Distance from 52W High",
+          "detail": "15.04% below 52-week high.",
+          "points": 6.0
+        }
+      ],
+      "reasons": [
+        "\u26a1 Fresh RSI(14) Bullish Crossover above 50 triggered on completed candle",
+        "\ud83d\udcc8 Strong uptrend: Price \u20b91575.2 trading above 50 EMA (\u20b91546.83) and 200 EMA (\u20b91517.72)",
+        "\ud83d\udd25 Massive volume breakout (1.64x 20-day average volume)"
+      ],
+      "reference_levels": {
+        "entry_reference": 1589.2,
+        "stop_loss_reference": 1523.63,
+        "target_1_reference": 1720.34,
+        "target_2_reference": 1785.91,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 65.57
+      }
+    },
+    {
+      "symbol": "AXISBANK",
+      "company_name": "Axis Bank Ltd.",
+      "sector": "Bank",
+      "price": 1264.6,
+      "change_percent": -0.3,
+      "swing_score": 71.0,
+      "classification": "CONFIRMED SWING SETUP",
+      "rsi_fresh_crossover": false,
+      "rsi_status": "Bullish Continuation (7 sessions above 50)",
+      "rsi_value": 55.13,
+      "ema_trend_bullish": true,
+      "ema_50": 1249.11,
+      "ema_200": 1263.09,
+      "volume_breakout": true,
+      "vol_ratio": 1.81,
+      "volume": 11522506,
+      "avg_volume_20d": 6376513,
+      "dist_from_52w_high_pct": 10.84,
+      "high_52w": 1418.3,
+      "sector_score": 15.0,
+      "candle_timestamp": "2026-10-14 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Upstox API v2",
+      "passed_rules": [
+        {
+          "name": "RSI(14) Bullish Momentum",
+          "detail": "RSI is bullish at 55.13 (7 sessions above 50, not a fresh cross).",
+          "points": 16.0
+        },
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b91264.6 > EMA50 \u20b91249.11 & EMA200 \u20b91263.09",
+          "points": 20.0
+        },
+        {
+          "name": "Strong Volume Surge",
+          "detail": "Volume is 1.81x 20-day average volume.",
+          "points": 20.0
+        },
+        {
+          "name": "Within 15% of 52-Week High",
+          "detail": "Trading 10.84% below 52-week high (\u20b91418.3).",
+          "points": 12.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "Sector Headwind",
+          "detail": "Bank sector is lagging (15.0/100).",
+          "points": 3.0
+        }
+      ],
+      "reasons": [
+        "RSI(14) at 55.13 shows ongoing bullish momentum (7 days above 50)",
+        "\ud83d\udcc8 Strong uptrend: Price \u20b91264.6 trading above 50 EMA (\u20b91249.11) and 200 EMA (\u20b91263.09)",
+        "\ud83d\udd25 Massive volume breakout (1.81x 20-day average volume)",
+        "Within consolidation distance (10.84%) of 52-week high"
+      ],
+      "reference_levels": {
+        "entry_reference": 1276.1,
+        "stop_loss_reference": 1230.37,
+        "target_1_reference": 1367.56,
+        "target_2_reference": 1413.29,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 45.73
+      }
+    },
+    {
+      "symbol": "KOTAKBANK",
+      "company_name": "Kotak Mahindra Bank Ltd.",
+      "sector": "Bank",
+      "price": 438.05,
+      "change_percent": -0.22,
+      "swing_score": 67.0,
+      "classification": "CONFIRMED SWING SETUP",
+      "rsi_fresh_crossover": false,
+      "rsi_status": "Bullish Continuation (7 sessions above 50)",
+      "rsi_value": 66.85,
+      "ema_trend_bullish": true,
+      "ema_50": 414.46,
+      "ema_200": 405.24,
+      "volume_breakout": false,
+      "vol_ratio": 1.08,
+      "volume": 24974530,
+      "avg_volume_20d": 23193157,
+      "dist_from_52w_high_pct": 3.34,
+      "high_52w": 453.2,
+      "sector_score": 15.0,
+      "candle_timestamp": "2026-10-14 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Upstox API v2",
+      "passed_rules": [
+        {
+          "name": "RSI(14) Bullish Momentum",
+          "detail": "RSI is bullish at 66.85 (7 sessions above 50, not a fresh cross).",
+          "points": 16.0
+        },
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b9438.05 > EMA50 \u20b9414.46 & EMA200 \u20b9405.24",
+          "points": 25.0
+        },
+        {
+          "name": "At/Near 52-Week High",
+          "detail": "Trading within 3.34% of 52-week high (\u20b9453.2).",
+          "points": 15.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "Normal Volume",
+          "detail": "Volume ratio 1.08x is below the 1.2x surge mark.",
+          "points": 8.0
+        },
+        {
+          "name": "Sector Headwind",
+          "detail": "Bank sector is lagging (15.0/100).",
+          "points": 3.0
+        }
+      ],
+      "reasons": [
+        "RSI(14) at 66.85 shows ongoing bullish momentum (7 days above 50)",
+        "\ud83d\udcc8 Strong uptrend: Price \u20b9438.05 trading above 50 EMA (\u20b9414.46) and 200 EMA (\u20b9405.24)",
+        "\ud83c\udfaf Ultra-high relative strength: within 3.34% of 52-week high (\u20b9453.2)"
+      ],
+      "reference_levels": {
+        "entry_reference": 445.25,
+        "stop_loss_reference": 421.84,
+        "target_1_reference": 492.07,
+        "target_2_reference": 515.48,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 23.41
+      }
+    },
+    {
+      "symbol": "DIVISLAB",
+      "company_name": "Divi's Laboratories Ltd.",
+      "sector": "Pharma",
+      "price": 9023.0,
+      "change_percent": -2.82,
+      "swing_score": 67.0,
+      "classification": "CONFIRMED SWING SETUP",
+      "rsi_fresh_crossover": false,
+      "rsi_status": "Below 50 (Bearish Momentum)",
+      "rsi_value": 31.12,
+      "ema_trend_bullish": true,
+      "ema_50": 8943.07,
+      "ema_200": 7615.59,
+      "volume_breakout": true,
+      "vol_ratio": 1.91,
+      "volume": 992022,
+      "avg_volume_20d": 518972,
+      "dist_from_52w_high_pct": 7.36,
+      "high_52w": 9740.0,
+      "sector_score": 60.0,
+      "candle_timestamp": "2026-10-14 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Upstox API v2",
+      "passed_rules": [
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b99023.0 > EMA50 \u20b98943.07 & EMA200 \u20b97615.59",
+          "points": 25.0
+        },
+        {
+          "name": "Strong Volume Surge",
+          "detail": "Volume is 1.91x 20-day average volume.",
+          "points": 20.0
+        },
+        {
+          "name": "Within 15% of 52-Week High",
+          "detail": "Trading 7.36% below 52-week high (\u20b99740.0).",
+          "points": 12.0
+        },
+        {
+          "name": "Sector Neutral",
+          "detail": "Pharma sector score is 60.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "RSI(14) Weak Momentum",
+          "detail": "RSI is 31.12 (below 50 neutral threshold).",
+          "points": 0.0
+        }
+      ],
+      "reasons": [
+        "\ud83d\udcc8 Strong uptrend: Price \u20b99023.0 trading above 50 EMA (\u20b98943.07) and 200 EMA (\u20b97615.59)",
+        "\ud83d\udd25 Massive volume breakout (1.91x 20-day average volume)",
+        "Within consolidation distance (7.36%) of 52-week high"
+      ],
+      "reference_levels": {
+        "entry_reference": 9740.0,
+        "stop_loss_reference": 8808.92,
+        "target_1_reference": 11602.16,
+        "target_2_reference": 12533.24,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 931.08
+      }
+    },
+    {
+      "symbol": "HCLTECH",
+      "company_name": "HCL Technologies Ltd.",
+      "sector": "IT",
+      "price": 1327.0,
+      "change_percent": 0.08,
+      "swing_score": 66.0,
+      "classification": "CONFIRMED SWING SETUP",
+      "rsi_fresh_crossover": false,
+      "rsi_status": "Bullish Continuation (2 sessions above 50)",
+      "rsi_value": 61.49,
+      "ema_trend_bullish": true,
+      "ema_50": 1258.53,
+      "ema_200": 1319.49,
+      "volume_breakout": true,
+      "vol_ratio": 2.31,
+      "volume": 9240685,
+      "avg_volume_20d": 4000357,
+      "dist_from_52w_high_pct": 25.45,
+      "high_52w": 1780.1,
+      "sector_score": 55.0,
+      "candle_timestamp": "2026-10-14 00:00:00",
+      "candle_timeframe": "1D (Completed Daily Candle)",
+      "data_source": "Upstox API v2",
+      "passed_rules": [
+        {
+          "name": "RSI(14) Bullish Momentum",
+          "detail": "RSI is bullish at 61.49 (2 sessions above 50, not a fresh cross).",
+          "points": 16.0
+        },
+        {
+          "name": "EMA Trend Alignment",
+          "detail": "Price \u20b91327.0 > EMA50 \u20b91258.53 & EMA200 \u20b91319.49",
+          "points": 20.0
+        },
+        {
+          "name": "Strong Volume Surge",
+          "detail": "Volume is 2.31x 20-day average volume.",
+          "points": 20.0
+        },
+        {
+          "name": "Sector Neutral",
+          "detail": "IT sector score is 55.0/100.",
+          "points": 10.0
+        }
+      ],
+      "failed_rules": [
+        {
+          "name": "Far from 52W High",
+          "detail": "25.45% below 52-week high. Overhead resistance present.",
+          "points": 0.0
+        }
+      ],
+      "reasons": [
+        "RSI(14) at 61.49 shows ongoing bullish momentum (2 days above 50)",
+        "\ud83d\udcc8 Strong uptrend: Price \u20b91327.0 trading above 50 EMA (\u20b91258.53) and 200 EMA (\u20b91319.49)",
+        "\ud83d\udd25 Massive volume breakout (2.31x 20-day average volume)"
+      ],
+      "reference_levels": {
+        "entry_reference": 1353.7,
+        "stop_loss_reference": 1270.13,
+        "target_1_reference": 1520.84,
+        "target_2_reference": 1604.41,
+        "risk_reward": "1:2 / 1:3",
+        "risk_per_share": 83.57
+      }
+    }
+  ],
+  "monthly_buy_candidates": [
+    {
+      "symbol": "AXISBANK",
+      "company_name": "Axis Bank Ltd.",
+      "sector": "Bank",
+      "price": 1264.6,
+      "classification": "BUY CANDIDATE",
+      "badge_color": "green",
+      "score": 85,
+      "action_plan": "High-conviction monthly candidate. Accumulate on dips toward 50 EMA with 1:3 risk-reward.",
+      "technical_summary": {
+        "ema_50": 1249.11,
+        "ema_200": 1263.09,
+        "high_52w": 1418.3,
+        "dist_52w_pct": 10.84,
+        "return_3m_pct": 0.5,
+        "return_6m_pct": -7.7,
+        "above_200_ema": true,
+        "above_50_ema": true
+      },
+      "fundamental_summary": {
+        "roce": 15.36,
+        "roe": 13.35,
+        "debt_to_equity": 0.0,
+        "sales_growth": 14.0,
+        "profit_growth": 21.8,
+        "pe_ratio": 14.48,
+        "is_verified": true,
+        "data_source": "Verified Public Financials (NSE/Yahoo Finance)"
+      },
+      "passed_criteria": [
+        "Price (\u20b91264.6) above 200 EMA (\u20b91263.09) - Long-term bull trend intact",
+        "Price above 50 EMA (\u20b91249.11) - Medium-term momentum positive",
+        "Near 52W High (\u20b91418.3) - Distance is only 10.84%",
+        "High Capital Efficiency: ROCE is 15.36% (>= 15% threshold)",
+        "Bank/NBFC sector: Debt evaluated via capital adequacy",
+        "Consistent Growth: Sales +14.0%, Profit +21.8%"
+      ],
+      "caution_criteria": [
+        "Moderate ROE: 13.35%"
+      ],
+      "failed_criteria": [],
+      "timestamp": "2026-10-14"
+    },
+    {
+      "symbol": "HCLTECH",
+      "company_name": "HCL Technologies Ltd.",
+      "sector": "IT",
+      "price": 1327.0,
+      "classification": "BUY CANDIDATE",
+      "badge_color": "green",
+      "score": 80,
+      "action_plan": "High-conviction monthly candidate. Accumulate on dips toward 50 EMA with 1:3 risk-reward.",
+      "technical_summary": {
+        "ema_50": 1258.53,
+        "ema_200": 1319.49,
+        "high_52w": 1780.1,
+        "dist_52w_pct": 25.45,
+        "return_3m_pct": 7.1,
+        "return_6m_pct": 3.9,
+        "above_200_ema": true,
+        "above_50_ema": true
+      },
+      "fundamental_summary": {
+        "roce": 28.35,
+        "roe": 24.65,
+        "debt_to_equity": 0.08,
+        "sales_growth": 2.2,
+        "profit_growth": 10.8,
+        "pe_ratio": 20.12,
+        "is_verified": true,
+        "data_source": "Verified Public Financials (NSE/Yahoo Finance)"
+      },
+      "passed_criteria": [
+        "Price (\u20b91327.0) above 200 EMA (\u20b91319.49) - Long-term bull trend intact",
+        "Price above 50 EMA (\u20b91258.53) - Medium-term momentum positive",
+        "High Capital Efficiency: ROCE is 28.35% (>= 15% threshold)",
+        "Healthy Profitability: ROE is 24.65% (>= 15% threshold)",
+        "Conservative Leverage: Debt/Equity is 0.08 (<= 0.5)"
+      ],
+      "caution_criteria": [
+        "Lagging 25.45% below 52W High (\u20b91780.1)",
+        "Subdued Growth: Sales 2.2%, Profit 10.8%"
+      ],
+      "failed_criteria": [],
+      "timestamp": "2026-10-14"
+    }
+  ]
+}
