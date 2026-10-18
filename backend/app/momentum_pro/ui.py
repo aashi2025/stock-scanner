@@ -14,6 +14,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
+import urllib.parse
 from datetime import datetime
 from typing import List, Dict, Any
 
@@ -411,6 +412,23 @@ def render_momentum_pro_page(provider: MarketDataProvider, available_symbols: Li
         * **Reward-to-Risk:** `1 : 3.0`
         * **Estimated Net Profit:** `₹{tgt_3_profit:,.2f}`
         """)
+
+        # 1-Click WhatsApp Share Link
+        wa_tp_text = (
+            f"🔔 *TRADE PLAN: {sel_stock}*\n"
+            f"━━━━━━━━━━━━━━━━━━━\n"
+            f"• *Entry Reference:* ₹{live_plan['entry_reference']:,.2f} ({live_plan['entry_zone']})\n"
+            f"• *Stop Loss:* ₹{live_plan['stop_loss']:,.2f} ({live_plan['stop_loss_pct']})\n"
+            f"• *Target 1 (1.5R):* ₹{live_plan['target_1']:,.2f}\n"
+            f"• *Target 2 (2.0R):* ₹{live_plan['target_2']:,.2f}\n"
+            f"• *Target 3 (3.0R):* ₹{live_plan['target_3']:,.2f}\n"
+            f"• *Sizing:* {live_plan['position_shares']} Shares (Total: ₹{live_plan['total_investment']:,.2f})\n"
+            f"• *Max Risk:* ₹{live_plan['max_risk_amount']:,.2f} ({live_plan['capital_allocation_pct']}% of Capital)\n"
+            f"━━━━━━━━━━━━━━━━━━━\n"
+            f"⚠️ _Calculated research plan only. Not SEBI registered investment advice._"
+        )
+        wa_share_url = f"https://wa.me/?text={urllib.parse.quote(wa_tp_text)}"
+        st.link_button("📲 Share this Trade Plan to WhatsApp (1-Click Free)", wa_share_url, use_container_width=True)
 
         st.markdown(f"<div style='background:#f1f5f9; border-left:4px solid #0284c7; padding:10px 14px; border-radius:4px; font-size:0.85rem; color:#334155;'><b>Notice:</b> {TRADE_PLAN_DISCLAIMER}</div>", unsafe_allow_html=True)
 
