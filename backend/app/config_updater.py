@@ -68,3 +68,62 @@ def get_current_upstox_credentials():
         "access_token": os.getenv("UPSTOX_ACCESS_TOKEN", "").strip("'\""),
         "provider": os.getenv("MARKET_DATA_PROVIDER", "upstox").strip("'\"")
     }
+
+
+def save_notification_credentials(
+    whatsapp_phone: str = "",
+    whatsapp_apikey: str = "",
+    telegram_bot_token: str = "",
+    telegram_chat_id: str = ""
+) -> bool:
+    """
+    Saves or updates WhatsApp and Telegram credentials directly into .env and runtime os.environ.
+    """
+    try:
+        os.makedirs(os.path.dirname(ENV_FILE), exist_ok=True)
+        existing = {}
+        if os.path.exists(ENV_FILE):
+            with open(ENV_FILE, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith("#") and "=" in line:
+                        k, v = line.split("=", 1)
+                        existing[k.strip()] = v.strip().strip("'\"")
+
+        if whatsapp_phone is not None:
+            existing["WHATSAPP_PHONE"] = whatsapp_phone.strip()
+            os.environ["WHATSAPP_PHONE"] = whatsapp_phone.strip()
+
+        if whatsapp_apikey is not None:
+            existing["WHATSAPP_CALLMEBOT_APIKEY"] = whatsapp_apikey.strip()
+            os.environ["WHATSAPP_CALLMEBOT_APIKEY"] = whatsapp_apikey.strip()
+
+        if telegram_bot_token is not None:
+            existing["TELEGRAM_BOT_TOKEN"] = telegram_bot_token.strip()
+            os.environ["TELEGRAM_BOT_TOKEN"] = telegram_bot_token.strip()
+
+        if telegram_chat_id is not None:
+            existing["TELEGRAM_CHAT_ID"] = telegram_chat_id.strip()
+            os.environ["TELEGRAM_CHAT_ID"] = telegram_chat_id.strip()
+
+        with open(ENV_FILE, "w", encoding="utf-8") as f:
+            f.write("# Indian Stock Research Tool - Environment Configuration\n")
+            for k, v in existing.items():
+                f.write(f'{k}="{v}"\n')
+
+        return True
+    except Exception as e:
+        print(f"Failed to update notification credentials in .env: {e}")
+        return False
+
+
+def get_current_notification_credentials():
+    """Returns current notification credentials in .env / os.environ."""
+    dotenv.load_dotenv(ENV_FILE, override=True)
+    return {
+        "whatsapp_phone": os.getenv("WHATSAPP_PHONE", "").strip("'\""),
+        "whatsapp_apikey": os.getenv("WHATSAPP_CALLMEBOT_APIKEY", "").strip("'\""),
+        "telegram_bot_token": os.getenv("TELEGRAM_BOT_TOKEN", "").strip("'\""),
+        "telegram_chat_id": os.getenv("TELEGRAM_CHAT_ID", "").strip("'\"")
+    }
+
