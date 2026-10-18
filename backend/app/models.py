@@ -59,3 +59,57 @@ class AppSettingModel(Base):
     min_sector_score = Column(Float, default=60.0)
     min_confirmation_score = Column(Float, default=65.0)
     updated_at = Column(DateTime, default=datetime.utcnow)
+
+
+class TradeJournalModel(Base):
+    """
+    Trade Journal persistence model.
+    Stores both planned research setups and user-confirmed real executions.
+    Strictly distinguishes theoretical signals from actual trades.
+    """
+    __tablename__ = "trade_journal"
+
+    id = Column(Integer, primary_key=True, index=True)
+    symbol = Column(String, index=True, nullable=False)
+    strategy_name = Column(String, index=True, nullable=False)
+    timeframe = Column(String, default="1d") # 5m, 15m, 1d, 1w
+    bias = Column(String, default="BULLISH") # BULLISH, BEARISH
+    planned_entry = Column(Float, nullable=False)
+    planned_stop_loss = Column(Float, nullable=False)
+    planned_target = Column(Float, nullable=False)
+    planned_quantity = Column(Integer, default=1)
+    planned_risk = Column(Float, default=0.0)
+    estimated_charges = Column(Float, default=0.0)
+    
+    # Real execution tracking (Supplied by user only)
+    is_user_executed = Column(Boolean, default=False)
+    actual_entry = Column(Float, nullable=True)
+    actual_exit = Column(Float, nullable=True)
+    actual_pnl = Column(Float, nullable=True)
+    status = Column(String, default="PLANNED") # PLANNED, EXECUTED_OPEN, CLOSED_PROFIT, CLOSED_LOSS, CANCELLED
+    
+    tags = Column(String, nullable=True)
+    notes = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+
+class AlertHistoryModel(Base):
+    """
+    Alert History persistence model.
+    Records every alert generated, deduplication state, and Telegram dispatch logs.
+    """
+    __tablename__ = "alert_history"
+
+    id = Column(Integer, primary_key=True, index=True)
+    symbol = Column(String, index=True, nullable=False)
+    strategy_name = Column(String, index=True, nullable=False)
+    bias = Column(String, default="BULLISH")
+    timeframe = Column(String, default="1d")
+    trigger_level = Column(Float, nullable=True)
+    invalidation_level = Column(Float, nullable=True)
+    risk_reward = Column(String, default="1:2.0")
+    status = Column(String, default="NEW") # NEW, CONFIRMED, INVALIDATED, EXPIRED
+    message_text = Column(Text, nullable=False)
+    is_telegram_sent = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
