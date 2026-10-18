@@ -20,10 +20,23 @@ from datetime import datetime, date
 # Add project root to sys.path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+import urllib.parse
 from backend.app.data_providers.factory import get_market_data_provider
 from backend.app.data_providers.csv_provider import CSVDataProvider
 from backend.app.data_providers.upstox import UpstoxDataProvider
-from backend.app.config_updater import save_upstox_credentials, get_current_upstox_credentials
+from backend.app.config_updater import (
+    save_upstox_credentials,
+    get_current_upstox_credentials,
+    save_notification_credentials,
+    get_current_notification_credentials
+)
+from backend.app.alerts.whatsapp_notifier import (
+    format_whatsapp_alert,
+    get_whatsapp_share_url,
+    send_whatsapp_callmebot,
+    send_test_whatsapp
+)
+from backend.app.alerts.manager import alert_manager
 from backend.app.engines.swing_scanner import analyze_swing_setup
 from backend.app.engines.market_trend import analyze_market_trend
 from backend.app.engines.sector_trend import analyze_sector_trends
@@ -161,6 +174,41 @@ with st.sidebar.expander("🔑 Upstox API Key & Token", expanded=(provider_choic
 
     st.markdown("[🔗 Open Upstox Developer Apps](https://account.upstox.com/developer/apps)")
 
+# WhatsApp & Telegram Alerts Configuration in Sidebar
+notif_creds = get_current_notification_credentials()
+with st.sidebar.expander("🔔 Alerts Config (WhatsApp & Telegram)", expanded=False):
+    st.markdown("**WhatsApp (CallMeBot / Free Bot):**")
+    wa_phone_in = st.text_input("WhatsApp Mobile (+91...)", value=notif_creds.get("whatsapp_phone", ""), placeholder="+919876543210", key="sb_wa_phone")
+    wa_key_in = st.text_input("CallMeBot API Key", value=notif_creds.get("whatsapp_apikey", ""), type="password", key="sb_wa_key")
+
+    st.markdown("**Telegram Bot (100% Free & Unlimited):**")
+    tg_token_in = st.text_input("Telegram Bot Token", value=notif_creds.get("telegram_bot_token", ""), type="password", key="sb_tg_token")
+    tg_chat_in = st.text_input("Telegram Chat ID", value=notif_creds.get("telegram_chat_id", ""), key="sb_tg_chat")
+
+    c_sb1, c_sb2 = st.columns(2)
+    if c_sb1.button("💾 Save", use_container_width=True, key="btn_save_notif"):
+        save_notification_credentials(wa_phone_in, wa_key_in, tg_token_in, tg_chat_in)
+        st.success("✅ अलर्ट सेटिंग्स सुरक्षित हो गईं!")
+        st.rerun()
+
+    if c_sb2.button("🧪 Test", use_container_width=True, key="btn_test_notif"):
+        wa_done = False
+        if wa_phone_in and wa_key_in:
+            wa_res = alert_manager.send_test_whatsapp(phone=wa_phone_in, apikey=wa_key_in)
+            if wa_res.get("success"):
+                st.success("🟢 WhatsApp टेस्ट संदेश भेजा गया!")
+                wa_done = True
+            else:
+                st.warning(f"🟡 WhatsApp: {wa_res.get('message')}")
+
+        if tg_token_in and tg_chat_in:
+            tg_res = alert_manager.send_test_telegram(bot_token=tg_token_in, chat_id=tg_chat_in)
+            if tg_res.get("success"):
+                st.success("🟢 Telegram टेस्ट संदेश भेजा गया!")
+            else:
+                st.warning(f"🟡 Telegram: {tg_res.get('message')}")
+        elif not wa_done:
+            st.info("कृपया WhatsApp या Telegram की डिटेल्स भरें।")
 
 st.sidebar.markdown("---")
 st.sidebar.subheader("⚙️ Scoring Weights (वजन)")
@@ -346,10 +394,28 @@ with tab2:
                 - **Target 1 (1:2 RR):** ₹{ref['target_1_reference']} | **Target 2 (1:3 RR):** ₹{ref['target_2_reference']}
                 """)
 
-                # Add to watchlist button
-                if st.button(f"⭐ Add {s['symbol']} to Watchlist", key=f"btn_wl_{s['symbol']}"):
+                # Action Buttons
+                c_act1, c_act2 = st.columns([1, 1])
+                if c_act1.button(f"⭐ Add {s['symbol']} to Watchlist", key=f"btn_wl_{s['symbol']}", use_container_width=True):
                     add_to_watchlist(s['symbol'], company_name=s['company_name'], notes="Fresh Swing Setup")
                     st.success(f"{s['symbol']} वॉचलिस्ट में जोड़ा गया!")
+
+                wa_card_msg = (
+                    f"🚀 *SWING SIGNAL: {s['symbol']}*\n"
+                    f"━━━━━━━━━━━━━━━━━━━\n"
+                    f"• *Price:* ₹{s['price']} (Score: {s['swing_score']}/100)\n"
+                    f"• *Setup:* Fresh RSI(14) Crossover ({s['rsi_value']})\n"
+                    f"• *Volume:* {s['vol_ratio']}x 20-DMA\n"
+                    f"• *Weekly MTF:* {mtf['mtf_status']}\n"
+                    f"• *Ref Entry:* ₹{ref['entry_reference']}\n"
+                    f"• *Stop Loss:* ₹{ref['stop_loss_reference']} (Risk: ₹{ref['risk_per_share']})\n"
+                    f"• *Target 1 (1:2):* ₹{ref['target_1_reference']}\n"
+                    f"• *Target 2 (1:3):* ₹{ref['target_2_reference']}\n"
+                    f"━━━━━━━━━━━━━━━━━━━\n"
+                    f"⚠️ _Analytical Research Only. Alerts-only mode._"
+                )
+                wa_card_url = f"https://wa.me/?text={urllib.parse.quote(wa_card_msg)}"
+                c_act2.link_button("📲 Share to WhatsApp", wa_card_url, use_container_width=True)
     else:
         st.warning("वर्तमान फिल्टर्स पर कोई नया सिग्नल नहीं मिला।")
 
@@ -547,6 +613,90 @@ with tab6:
                 st.divider()
     else:
         st.info("आपकी वॉचलिस्ट खाली है। 'Fresh Swing Signals' टैब से स्टॉक्स जोड़ें।")
+
+    st.markdown("---")
+    st.subheader("📲 1-Click WhatsApp Research Share")
+    st.markdown("""
+    **बिना किसी API Key के 1-Click में WhatsApp पर शेयर करें:** नीचे दिए गए बटन पर क्लिक करें। आपका WhatsApp तुरंत खुल जाएगा और वॉचलिस्ट व टॉप सिग्नल्स का पूरा रिसर्च मैसेज पहले से टाइप किया हुआ मिलेगा।
+    """)
+
+    # Build comprehensive daily summary for WhatsApp share
+    wl_valid = [w for w in (wl_mon or []) if not w.get("is_invalidated")]
+    wl_invalid = [w for w in (wl_mon or []) if w.get("is_invalidated")]
+
+    wa_digest = [
+        f"🇮🇳 *NSE STOCK RESEARCH DIGEST — {datetime.now().strftime('%d-%b-%Y')}*",
+        "━━━━━━━━━━━━━━━━━━━",
+        f"📊 *Active Watchlist ({len(wl_valid)} Holding / {len(wl_invalid)} Alerts):*"
+    ]
+    for w in (wl_mon or [])[:6]:
+        stat_emoji = "⚠️" if w.get("is_invalidated") else "✅"
+        wa_digest.append(f"• {stat_emoji} *{w['symbol']}* — ₹{w['price']} | {w['status']}")
+    
+    if swing_rows:
+        wa_digest.append("")
+        wa_digest.append(f"⚡ *Top Fresh Swing Setups ({len(swing_rows)}):*")
+        for s in swing_rows[:4]:
+            ref = s.get("reference_levels", {})
+            wa_digest.append(f"• *{s['symbol']}* (₹{s['price']}) — Score: `{s['swing_score']}/100` | Target: ₹{ref.get('target_1_reference', '-')} | SL: ₹{ref.get('stop_loss_reference', '-')}")
+
+    wa_digest.append("━━━━━━━━━━━━━━━━━━━")
+    wa_digest.append("⚠️ _Analytical Research Only. Alerts-only mode. Not SEBI Advice._")
+    wa_digest_text = "\n".join(wa_digest)
+    wa_digest_url = f"https://wa.me/?text={urllib.parse.quote(wa_digest_text)}"
+
+    st.link_button("📲 Share Complete Watchlist & Daily Report to WhatsApp (1-Click Free)", wa_digest_url, use_container_width=True)
+
+    st.markdown("---")
+    st.subheader("🤖 Automated Notification Engine (WhatsApp & Telegram)")
+
+    with st.expander("ℹ️ WhatsApp CallMeBot API Key क्यों नहीं आ रही है? (और सबसे तेज़ समाधान)", expanded=False):
+        st.markdown("""
+        ### 🔍 CallMeBot API Key न मिलने का कारण:
+        1. **बॉट के सर्वर स्लॉट्स फुल हैं:** CallMeBot एक फ़्री कम्युनिटी सेवा है। वर्तमान में अत्यधिक लोड होने के कारण उनके आधिकारिक पेज पर स्पष्ट लिखा है:
+           > *(The bot is currently full. Please check back in a few days; once slots are available, the phone number will be visible.)*
+        2. **WhatsApp द्वारा बॉट नंबर ब्लॉक:** WhatsApp/Meta अक्सर ऑटोमेटेड बॉट नंबर्स को अस्थायी रूप से ब्लॉक या रेट-लिमिट कर देता है, जिससे पुराने नंबर्स (+34 941..., +34 911...) पर संदेश भेजने पर ऑटो-रिप्लाई नहीं आता।
+
+        ---
+
+        ### 💡 आपके लिए 2 सबसे बेहतरीन और 100% काम करने वाले समाधान:
+        1. **1-Click WhatsApp Direct Share (बिना किसी सेटअप के):**
+           - आपको कोई नंबर सेव नहीं करना और कोई API Key नहीं चाहिए।
+           - इस टर्मिनल में हर सिग्नल, ट्रेड प्लान और वॉचलिस्ट के नीचे हरा **`📲 Share to WhatsApp`** बटन दिया गया है। 
+           - बटन दबाते ही आपका WhatsApp खुलता है और पूरा मैसेज तैयार मिलता है। इसे आप खुद को या अपने ग्रुप में भेज सकते हैं।
+
+        2. **Telegram Bot (100% मुफ़्त, कभी ब्लॉक नहीं होता, 1 मिनट में रेडी):**
+           - ट्रेडिंग अलर्ट के लिए पेशेवर ट्रेडर्स Telegram का उपयोग करते हैं क्योंकि यह 100% मुफ़्त, अनलिमिटेड और कभी बंद नहीं होता।
+           - **बनाने का तरीका (केवल 60 सेकंड):**
+             1. अपने फ़ोन पर Telegram ऐप खोलें।
+             2. सर्च करें: `@BotFather` और `/start` भेजें।
+             3. `/newbot` टाइप करें और अपने बॉट का नाम दें (जैसे: `MyStockAlertBot`)।
+             4. आपको तुरंत एक **HTTP API Token** मिलेगा (जैसे `123456789:ABCdef...`)।
+             5. अपने बनाए गए नए बॉट को सर्च करके `/start` भेजें।
+             6. फिर Telegram पर `@userinfobot` सर्च करके Start दबाएँ, वह आपको आपका **Chat ID** (संख्या जैसे `987654321`) बता देगा।
+             7. साइडबार में Token और Chat ID पेस्ट करके Save करें!
+        """)
+
+    # SQLite Alert Audit History
+    st.markdown("---")
+    st.subheader("🗄️ SQLite Alert Audit & Dispatch History")
+    hist_alerts = alert_manager.get_alert_history(limit=15)
+    if hist_alerts:
+        h_df = pd.DataFrame([
+            {
+                "Time": a["timestamp"],
+                "Symbol": a["symbol"],
+                "Strategy": a["strategy"],
+                "Bias": a["bias"],
+                "Timeframe": a["timeframe"],
+                "Status": a["status"],
+                "Telegram Sent": "✅ Yes" if a["telegram_sent"] else "❌ No",
+            }
+            for a in hist_alerts
+        ])
+        st.dataframe(h_df, use_container_width=True)
+    else:
+        st.caption("अभी तक कोई अलर्ट SQLite डेटाबेस में दर्ज नहीं हुआ है। नए सिग्नल ट्रिगर होने पर यहाँ हिस्ट्री दिखेगी।")
 
 
 # ==========================================
