@@ -50,6 +50,7 @@ from backend.app.watchlist.manager import add_to_watchlist, remove_from_watchlis
 from backend.app.alerts.telegram_notifier import format_telegram_alert, send_telegram_alert
 from backend.app.charts.plotly_charts import create_candlestick_chart, create_portfolio_equity_chart
 from backend.app.momentum_pro.ui import render_momentum_pro_page
+from backend.app.engines.swing_action_screener_ui import render_swing_action_screener_tab
 
 # Page Configuration
 st.set_page_config(
@@ -267,8 +268,9 @@ if st.session_state["current_view"] == "momentum_pro":
 # ==========================================
 
 # Main Navigation Tabs
-tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
+tab1, tab_screener, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "📊 Market Overview",
+    "🎯 Swing Action Screener (Nifty 100)",
     "⚡ Fresh Swing Signals",
     "📅 Monthly Candidates",
     "🔍 Stock Details & Chart",
@@ -319,6 +321,13 @@ with tab1:
         st.info(f"Sector data: {e}")
 
     st.markdown(f"<div class='disclaimer-box'><b>Research Heuristic:</b> {HEURISTIC_DISCLAIMER}</div>", unsafe_allow_html=True)
+
+
+# ==========================================
+# TAB: SWING ACTION SCREENER (NIFTY 100)
+# ==========================================
+with tab_screener:
+    render_swing_action_screener_tab()
 
 
 # ==========================================
