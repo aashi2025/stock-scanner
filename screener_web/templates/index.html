@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swing Delivery Trade Screener (Nifty 100)</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo-badge">🎯 NSE EOD</div>
+                <h1>Swing Delivery Trade Screener <span>(Nifty 100)</span></h1>
+                <p class="subtitle">Automated quantitative rules: 200 EMA + Supertrend (7,3) Bullish | RSI 50–68 | Support Pullback & Solid Breakouts</p>
+            </div>
+            <div class="header-right">
+                <div class="badge-status">
+                    <span class="status-dot"></span> Real EOD Data (yfinance)
+                </div>
+                <div class="universe-tag">Top 100 Liquid Equities</div>
+            </div>
+        </header>
+
+        <!-- Action & Control Bar -->
+        <section class="controls-panel">
+            <div class="action-group">
+                <button id="scanBtn" class="btn btn-primary">
+                    <span class="btn-icon">⚡</span> Scan Market Today
+                </button>
+                <button id="bulkWaBtn" class="btn btn-whatsapp" style="display: none;">
+                    📲 Share Top Picks to WhatsApp
+                </button>
+            </div>
+
+            <div class="filters-group">
+                <div class="control-item">
+                    <label for="searchInput">Search Symbol:</label>
+                    <input type="text" id="searchInput" placeholder="e.g. RELIANCE, TCS..." autocomplete="off">
+                </div>
+
+                <div class="control-item">
+                    <label for="filterSignal">Signal Filter:</label>
+                    <select id="filterSignal">
+                        <option value="ALL">All Setups</option>
+                        <option value="READY">🟢 READY TO BUY Only</option>
+                        <option value="WAIT">⏳ WAIT FOR CONFIRMATION Only</option>
+                        <option value="BREAKOUT">Setup B (Breakout) Only</option>
+                        <option value="PULLBACK">Setup A (Pullback) Only</option>
+                    </select>
+                </div>
+
+                <div class="control-item">
+                    <label for="sortBy">Sort By:</label>
+                    <select id="sortBy">
+                        <option value="rr_desc">Risk-Reward (High to Low)</option>
+                        <option value="rsi_desc">RSI 14 (Highest Momentum)</option>
+                        <option value="rsi_asc">RSI 14 (Near 50 Support)</option>
+                        <option value="cmp_desc">CMP (Price High to Low)</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Metrics Dashboard -->
+        <section class="metrics-row" id="metricsRow" style="display: none;">
+            <div class="metric-card">
+                <div class="metric-label">Universe Scanned</div>
+                <div class="metric-value" id="valTotalScanned">100</div>
+                <div class="metric-sub">Nifty 50 + Next 50</div>
+            </div>
+            <div class="metric-card highlight">
+                <div class="metric-label">Matching Setups</div>
+                <div class="metric-value" id="valMatches">0</div>
+                <div class="metric-sub">Passed 4 Rules</div>
+            </div>
+            <div class="metric-card success">
+                <div class="metric-label">🟢 Ready to Buy</div>
+                <div class="metric-value" id="valReady">0</div>
+                <div class="metric-sub">Confirmed Signals</div>
+            </div>
+            <div class="metric-card warning">
+                <div class="metric-label">⏳ Wait Confirmation</div>
+                <div class="metric-value" id="valWait">0</div>
+                <div class="metric-sub">Near Support / Test</div>
+            </div>
+        </section>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="state-container" style="display: none;">
+            <div class="spinner"></div>
+            <h3>Scanning Nifty 100 EOD Candles...</h3>
+            <p>Fetching 1-year OHLCV data from Yahoo Finance and computing Supertrend (7, 3), 200 EMA, RSI, and Breakouts.</p>
+        </div>
+
+        <!-- Initial Placeholder State -->
+        <div id="initialState" class="state-container">
+            <div class="state-icon">📊</div>
+            <h3>Click [⚡ Scan Market Today] to Run Daily Screener</h3>
+            <p>Zero manual chart reading needed. Get filtered stocks with exact Entry, Target (1:2 R:R), and Stop Loss.</p>
+        </div>
+
+        <!-- Results Table Section -->
+        <section id="resultsSection" style="display: none;">
+            <div class="table-header-info">
+                <h3 id="tableCountHeading">Screened Opportunities</h3>
+                <span id="scanTimestamp" class="timestamp-tag"></span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>CMP (₹)</th>
+                            <th>Signal</th>
+                            <th>Setup Type</th>
+                            <th>Entry Level</th>
+                            <th>Stop Loss (SL)</th>
+                            <th>Target Level</th>
+                            <th>Risk-Reward</th>
+                            <th>RSI (14)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Populated dynamically via app.js -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Methodology Accordion -->
+        <footer class="methodology-card">
+            <h4>📖 Quantitative Screening Rules (4-Filter Engine)</h4>
+            <div class="rules-grid">
+                <div class="rule-box">
+                    <strong>1. Primary Trend</strong>
+                    <p>Close &gt; 200 EMA and Supertrend (7, 3) Bullish direction.</p>
+                </div>
+                <div class="rule-box">
+                    <strong>2. Setup Structure</strong>
+                    <p>Setup A (EMA/Supertrend Pullback Reversal) OR Setup B (Solid Breakout with upper wick &le; 28%).</p>
+                </div>
+                <div class="rule-box">
+                    <strong>3. Momentum Filter</strong>
+                    <p>Daily RSI strictly between 50.0 and 68.0 (avoids weak &lt; 50 and overbought &gt; 68).</p>
+                </div>
+                <div class="rule-box">
+                    <strong>4. Auto Risk Management</strong>
+                    <p>SL below support/swing low (2–5% risk). Target calculated at minimum 1:2 Risk-to-Reward ratio.</p>
+                </div>
+            </div>
+            <p class="disclaimer">⚠️ Disclaimer: Analytical research tool only. Alerts-only mode. Not SEBI registered investment advice.</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
