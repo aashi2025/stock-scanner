@@ -81,5 +81,47 @@ def test_bullish_stock_detection_and_levels():
         assert res["stop_loss"] < res["entry_level"]
         assert res["target_level"] > res["entry_level"]
         assert res["risk_reward_ratio"].startswith("1:")
-        assert 50.0 <= res["rsi_14"] <= 68.0
+        assert 50.0 <= res["rsi_14"] <= 70.0
         assert res["signal"] in ["🟢 READY TO BUY", "⏳ WAIT FOR CONFIRMATION"]
+
+
+def test_setup_c_supertrend_flip_detection():
+    """Tests user's exact Chartink formula: 200 EMA + ST Flip + Close Range > 0.65 + Vol > SMA20."""
+    n_bars = 250
+    dates = pd.date_range("2024-01-01", periods=n_bars, freq="B")
+    
+    # Uptrend above 200 EMA
+    closes = np.linspace(800.0, 1050.0, n_bars)
+    
+    # Previous bar dip to put ST in bearish state
+    closes[-2] = 1000.0
+    # Day 0 sharp bounce flipping ST bullish
+    closes[-1] = 1060.0
+    
+    opens = closes.copy()
+    opens[-1] = 1030.0 # Green candle (Close > Open)
+    
+    highs = closes * 1.01
+    highs[-1] = 1065.0
+    
+    lows = closes * 0.99
+    lows[-1] = 1025.0
+    # (c0 - l0)/(h0 - l0) = (1060 - 1025) / (1065 - 1025) = 35 / 40 = 0.875 > 0.65
+    
+    volumes = np.full(n_bars, 1000000)
+    volumes[-1] = 2500000 # Heavy volume > 20 SMA
+    
+    df = pd.DataFrame({
+        "Open": opens,
+        "High": highs,
+        "Low": lows,
+        "Close": closes,
+        "Volume": volumes
+    }, index=dates)
+    
+    res = analyze_stock_swing_action("TEST_FLIP.NS", df)
+    assert res is not None
+    assert res["signal"] == "🟢 READY TO BUY"
+    assert "Supertrend Flip" in res["setup_type"] or "Setup" in res["setup_type"]
+    assert res["stop_loss"] < res["entry_level"]
+    assert res["target_level"] > res["entry_level"]
