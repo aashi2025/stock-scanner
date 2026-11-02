@@ -12,7 +12,7 @@ import requests
 from typing import Dict, Any, List, Optional
 from datetime import datetime, date
 
-from backend.app.database import SessionLocal
+from backend.app.database import SessionLocal, Base, engine
 from backend.app.models import AlertHistoryModel
 from backend.app.logging_config import logger
 from backend.app.engines.swing_action_screener import scan_nifty_100_market
@@ -112,6 +112,7 @@ def send_telegram_message_safe(
 
     # Record to SQLite database
     try:
+        Base.metadata.create_all(bind=engine)
         db = SessionLocal()
         rec = AlertHistoryModel(
             symbol="NIFTY100_DIGEST",
