@@ -147,24 +147,33 @@ def render_swing_action_screener_tab():
                 * **Pattern Detail:** {r['status_note']}
                 """)
 
-                # WhatsApp 1-Click Alert
-                wa_text = (
-                    f"🎯 *SWING ACTION SCREENER ALERT*\n"
-                    f"━━━━━━━━━━━━━━━━━━━\n"
-                    f"*{r['symbol']}* | *{r['signal']}*\n"
-                    f"• *Setup:* {r['setup_type']}\n"
-                    f"• *CMP / Entry:* ₹{r['entry_level']:,.2f}\n"
-                    f"• *Stop Loss (SL):* ₹{r['stop_loss']:,.2f} (-{r['sl_pct']}%)\n"
-                    f"• *Target Level:* ₹{r['target_level']:,.2f} (+{r['target_pct']}%)\n"
-                    f"• *Risk/Reward:* {r['risk_reward_ratio']}\n"
-                    f"• *RSI (14):* {r['rsi_14']} | *200 EMA:* ₹{r['ema_200']:,.2f}\n"
-                    f"━━━━━━━━━━━━━━━━━━━\n"
-                    f"⚠️ _Analytical Research Only. Alerts-only mode. Not SEBI Advice._"
-                )
-                wa_url = f"https://wa.me/?text={urllib.parse.quote(wa_text)}"
-                st.link_button(f"📲 Share {r['symbol']} Setup to WhatsApp (1-Click)", wa_url)
+                # WhatsApp & Telegram Instant Alerts
+                c_wa, c_tg = st.columns(2)
+                with c_wa:
+                    st.link_button(f"📲 Share {r['symbol']} to WhatsApp", wa_url, use_container_width=True)
+                with c_tg:
+                    if st.button(f"📢 Send {r['symbol']} to Telegram", key=f"btn_tg_{r['symbol']}", use_container_width=True):
+                        from backend.app.alerts.telegram_digest import send_telegram_message_safe
+                        tg_card_text = (
+                            f"🎯 <b>SWING ACTION ALERT: {r['symbol']}</b>\n"
+                            f"━━━━━━━━━━━━━━━━━━━\n"
+                            f"<b>Signal:</b> {r['signal']}\n"
+                            f"• <b>Setup:</b> {r['setup_type']}\n"
+                            f"• <b>CMP / Entry:</b> ₹{r['entry_level']:,.2f}\n"
+                            f"• <b>Stop Loss (SL):</b> ₹{r['stop_loss']:,.2f} (-{r['sl_pct']}%)\n"
+                            f"• <b>Target Level:</b> ₹{r['target_level']:,.2f} (+{r['target_pct']}%)\n"
+                            f"• <b>Risk/Reward:</b> {r['risk_reward_ratio']}\n"
+                            f"• <b>RSI (14):</b> {r['rsi_14']} | <b>200 EMA:</b> ₹{r['ema_200']:,.2f}\n"
+                            f"━━━━━━━━━━━━━━━━━━━\n"
+                            f"⚠️ <i>Analytical Research Only. Alerts-only mode.</i>"
+                        )
+                        tg_res = send_telegram_message_safe(tg_card_text)
+                        if tg_res.get("success"):
+                            st.success(f"✅ {r['symbol']} का अलर्ट Telegram पर भेज दिया गया!")
+                        else:
+                            st.warning(f"🟡 Telegram: {tg_res.get('message')}")
 
-        # Bulk WhatsApp Share Button
+        # Bulk Actions: WhatsApp & Telegram
         st.markdown("---")
         top_picks = [r for r in filtered_results if r["signal"] == "🟢 READY TO BUY"][:5]
         if not top_picks:
@@ -187,7 +196,18 @@ def render_swing_action_screener_tab():
         bulk_msg.append("⚠️ _Analytical Research Only. Alerts-only mode. Not SEBI Advice._")
         bulk_url = f"https://wa.me/?text={urllib.parse.quote(chr(10).join(bulk_msg))}"
 
-        st.link_button("📲 Share Top Screened Swing Setups to WhatsApp (1-Click Free)", bulk_url, use_container_width=True)
+        col_sh1, col_sh2 = st.columns(2)
+        with col_sh1:
+            st.link_button("📲 Share Top Setups to WhatsApp (1-Click)", bulk_url, use_container_width=True)
+        with col_sh2:
+            if st.button("📢 Send Complete Screener Report to Telegram (1-Click)", type="primary", key="btn_send_screener_tg", use_container_width=True):
+                from backend.app.alerts.telegram_digest import send_telegram_message_safe, generate_instant_screener_telegram_alert
+                tg_text = generate_instant_screener_telegram_alert(filtered_results)
+                tg_res = send_telegram_message_safe(tg_text)
+                if tg_res.get("success"):
+                    st.success("🟢 Telegram पर पूरी स्क्रीनर रिपोर्ट सफलतापूर्वक भेज दी गई!")
+                else:
+                    st.warning(f"🟡 Telegram: {tg_res.get('message')}")
 
     else:
         st.info("💡 वर्तमान फिल्टर्स पर कोई स्टॉक नहीं मिला। [⚡ Scan Market Today] बटन दबाकर ताज़ा डेटा स्कैन करें।")
