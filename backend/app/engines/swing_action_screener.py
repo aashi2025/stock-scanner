@@ -156,10 +156,49 @@ def analyze_stock_swing_action(symbol: str, df: pd.DataFrame) -> Optional[Dict[s
         return None
         
     # Filter 3: Momentum Filter
-    # Daily RSI between 50.0 and 68.0
-    is_rsi_valid = bool(50.0 <= rsi_val <= 68.0)
+    # Daily RSI between 50.0 and 70.0
+    is_rsi_valid = bool(50.0 <= rsi_val <= 70.0)
     if not is_rsi_valid:
         return None
+
+    # Volume and Candle Calculations
+    vol = df['Volume'] if 'Volume' in df.columns else pd.Series(dtype=float)
+    vol_sma20 = vol.rolling(20).mean() if len(vol) >= 20 else pd.Series(dtype=float)
+    is_vol_above_sma = bool(len(vol) >= 20 and float(vol.iloc[-1]) > float(vol_sma20.iloc[-1]))
+
+    h0 = float(high.iloc[-1])
+    l0 = float(low.iloc[-1])
+    o0 = float(open_p.iloc[-1])
+    rng_0 = h0 - l0
+    close_range_ratio = (cmp - l0) / rng_0 if rng_0 > 0 else 0.0
+    is_close_range_valid = bool(close_range_ratio > 0.65)
+    is_green_today = bool(cmp > o0)
+
+    # Supertrend Flip Calculations
+    # [0] Close > [0] Supertrend AND [-1] Close <= [-1] Supertrend
+    st_today_flip = bool(cmp > st_val and float(close.iloc[-2]) <= float(st_series.iloc[-2]))
+    st_recent_flip = bool(
+        st_today_flip or (
+            len(close) >= 3 and float(close.iloc[-2]) > float(st_series.iloc[-2]) and float(close.iloc[-3]) <= float(st_series.iloc[-3])
+        )
+    )
+
+    # Distance from 200 EMA (< 15% threshold)
+    is_near_ema200 = bool(cmp < (ema_200_val * 1.15))
+
+    # Setup C: Institutional High-Conviction Fresh Supertrend Flip (User Formula)
+    # [0] close > 200 EMA and [0] close > ST and [-1] close <= ST
+    # and (close - low)/(high - low) > 0.65 and close > open
+    # and volume > 20 SMA vol and 55 < RSI < 70 and close < 200 EMA * 1.15
+    setup_c = bool(
+        cmp > ema_200_val and
+        st_recent_flip and
+        is_close_range_valid and
+        is_green_today and
+        is_vol_above_sma and
+        (55.0 <= rsi_val <= 70.0) and
+        is_near_ema200
+    )
 
     # Filter 2: Pullback / Breakout Setup
     support = max(ema_200_val, st_val)
@@ -198,10 +237,15 @@ def analyze_stock_swing_action(symbol: str, df: pd.DataFrame) -> Optional[Dict[s
                 
     setup_b = recent_breakout and solid_candle
     
-    if not (setup_a or setup_b):
+    if not (setup_c or setup_a or setup_b):
         return None
         
-    setup_type = "Setup B: Solid Breakout" if setup_b else "Setup A: EMA Pullback / Support Test"
+    if setup_c:
+        setup_type = "Setup C: Fresh Supertrend Flip (High-Conviction)"
+    elif setup_b:
+        setup_type = "Setup B: Solid Breakout"
+    else:
+        setup_type = "Setup A: EMA Pullback / Support Test"
     
     # Filter 4: Auto Levels Calculation
     entry = round(cmp, 2)
@@ -227,7 +271,10 @@ def analyze_stock_swing_action(symbol: str, df: pd.DataFrame) -> Optional[Dict[s
     rr_str = f"1:{rr_ratio_val}"
     
     # Signal Labeling
-    if setup_b or (setup_a and is_green_reversal):
+    if setup_c:
+        signal = "🟢 READY TO BUY"
+        status_note = f"🚀 Fresh Supertrend Flip: Candle closed at top {close_range_ratio*100:.0f}% of range with >20 SMA volume & <15% from 200 EMA."
+    elif setup_b or (setup_a and is_green_reversal):
         signal = "🟢 READY TO BUY"
         status_note = "Confirmed pattern alignment. Entry triggered at market/breakout."
     else:
@@ -241,6 +288,7 @@ def analyze_stock_swing_action(symbol: str, df: pd.DataFrame) -> Optional[Dict[s
         "cmp": entry,
         "signal": signal,
         "setup_type": setup_type,
+        "is_supertrend_flip": setup_c,
         "entry_level": entry,
         "stop_loss": sl,
         "sl_pct": sl_pct,
@@ -251,6 +299,9 @@ def analyze_stock_swing_action(symbol: str, df: pd.DataFrame) -> Optional[Dict[s
         "rsi_14": round(rsi_val, 1),
         "ema_200": round(ema_200_val, 2),
         "supertrend": round(st_val, 2),
+        "close_range_ratio": round(close_range_ratio, 2),
+        "vol_above_sma20": is_vol_above_sma,
+        "ema200_dist_pct": round(((cmp - ema_200_val) / ema_200_val) * 100, 1),
         "candle_date": df.index[-1].strftime("%Y-%m-%d") if hasattr(df.index[-1], "strftime") else str(df.index[-1])[:10],
         "status_note": status_note
     }
