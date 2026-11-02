@@ -309,10 +309,10 @@ if st.session_state["current_view"] == "momentum_pro":
 # OLD SCANNER VIEW (100% UNCHANGED & PRESERVED)
 # ==========================================
 
-# Main Navigation Tabs
-tab1, tab_screener, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
+# Main Navigation Tabs — Tab 1 is dedicated to Swing Action Screener & Setup C
+tab_screener, tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
+    "🎯 Swing Action Screener (Setup C)",
     "📊 Market Overview",
-    "🎯 Swing Action Screener (Nifty 100)",
     "⚡ Fresh Swing Signals",
     "📅 Monthly Candidates",
     "🔍 Stock Details & Chart",
@@ -323,7 +323,14 @@ tab1, tab_screener, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
 
 
 # ==========================================
-# TAB 1: MARKET OVERVIEW
+# TAB 1: SWING ACTION SCREENER (NIFTY 100 & SETUP C)
+# ==========================================
+with tab_screener:
+    render_swing_action_screener_tab()
+
+
+# ==========================================
+# TAB 2: MARKET OVERVIEW
 # ==========================================
 with tab1:
     st.subheader("1. NIFTY 50 Macro Regime & Health")
@@ -363,13 +370,6 @@ with tab1:
         st.info(f"Sector data: {e}")
 
     st.markdown(f"<div class='disclaimer-box'><b>Research Heuristic:</b> {HEURISTIC_DISCLAIMER}</div>", unsafe_allow_html=True)
-
-
-# ==========================================
-# TAB: SWING ACTION SCREENER (NIFTY 100)
-# ==========================================
-with tab_screener:
-    render_swing_action_screener_tab()
 
 
 # ==========================================
