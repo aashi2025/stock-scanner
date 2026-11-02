@@ -154,6 +154,8 @@ def render_swing_action_screener_tab():
                 "Target Level": f"₹{r['target_level']:,.2f} (+{r['target_pct']}%)",
                 "Risk-Reward": r["risk_reward_ratio"],
                 "RSI (14)": r["rsi_14"],
+                "Close Range": f"{r.get('close_range_ratio', 0.0)*100:.0f}%",
+                "Vol > 20SMA": "🟢 Yes" if r.get("vol_above_sma20") else "⚪ No",
                 "200 EMA": f"₹{r['ema_200']:,.2f}",
                 "Supertrend": f"₹{r['supertrend']:,.2f}"
             })
