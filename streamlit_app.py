@@ -37,6 +37,13 @@ from backend.app.alerts.whatsapp_notifier import (
     send_test_whatsapp
 )
 from backend.app.alerts.manager import alert_manager
+from backend.app.alerts.morning_scheduler import morning_scheduler
+from backend.app.alerts.bot_listener import bot_listener
+from backend.app.alerts.telegram_digest import (
+    send_telegram_message_safe,
+    generate_morning_telegram_digest,
+    generate_instant_screener_telegram_alert
+)
 from backend.app.engines.swing_scanner import analyze_swing_setup
 from backend.app.engines.market_trend import analyze_market_trend
 from backend.app.engines.sector_trend import analyze_sector_trends
@@ -177,14 +184,33 @@ with st.sidebar.expander("🔑 Upstox API Key & Token", expanded=(provider_choic
 
 # WhatsApp & Telegram Alerts Configuration in Sidebar
 notif_creds = get_current_notification_credentials()
-with st.sidebar.expander("🔔 Alerts Config (WhatsApp & Telegram)", expanded=False):
+tg_token_val = notif_creds.get("telegram_bot_token", "").strip()
+tg_chat_val = notif_creds.get("telegram_chat_id", "").strip()
+
+# Auto-start background Telegram daemons if credentials exist
+if tg_token_val and tg_chat_val:
+    if not morning_scheduler.is_running():
+        morning_scheduler.start(bot_token=tg_token_val, chat_id=tg_chat_val, target_time="08:30")
+    if not bot_listener.is_running():
+        bot_listener.start(bot_token=tg_token_val, authorized_chat_id=tg_chat_val)
+
+with st.sidebar.expander("🔔 Alerts Config (Telegram & WhatsApp)", expanded=False):
+    st.markdown("**Telegram Bot (100% Free & Unlimited):**")
+    tg_token_in = st.text_input("Telegram Bot Token", value=tg_token_val, type="password", help="BotFather से प्राप्त टोकन", key="sb_tg_token")
+    tg_chat_in = st.text_input("Telegram Chat ID", value=tg_chat_val, help="userinfobot से प्राप्त Chat ID", key="sb_tg_chat")
+
+    if tg_token_val and tg_chat_val:
+        st.markdown(
+            "<div style='font-size:0.78rem; color:#10b981; background:rgba(16,185,129,0.1); padding:6px 10px; border-radius:6px; margin:6px 0;'>"
+            "🟢 <b>Auto Morning Alert:</b> Active (08:30 AM IST)<br>"
+            "🤖 <b>Telegram Bot:</b> Active (Reply to <code>/scan</code>)"
+            "</div>",
+            unsafe_allow_html=True
+        )
+
     st.markdown("**WhatsApp (CallMeBot / Free Bot):**")
     wa_phone_in = st.text_input("WhatsApp Mobile (+91...)", value=notif_creds.get("whatsapp_phone", ""), placeholder="+919876543210", key="sb_wa_phone")
     wa_key_in = st.text_input("CallMeBot API Key", value=notif_creds.get("whatsapp_apikey", ""), type="password", key="sb_wa_key")
-
-    st.markdown("**Telegram Bot (100% Free & Unlimited):**")
-    tg_token_in = st.text_input("Telegram Bot Token", value=notif_creds.get("telegram_bot_token", ""), type="password", key="sb_tg_token")
-    tg_chat_in = st.text_input("Telegram Chat ID", value=notif_creds.get("telegram_chat_id", ""), key="sb_tg_chat")
 
     c_sb1, c_sb2 = st.columns(2)
     if c_sb1.button("💾 Save", use_container_width=True, key="btn_save_notif"):
@@ -194,6 +220,13 @@ with st.sidebar.expander("🔔 Alerts Config (WhatsApp & Telegram)", expanded=Fa
 
     if c_sb2.button("🧪 Test", use_container_width=True, key="btn_test_notif"):
         wa_done = False
+        if tg_token_in and tg_chat_in:
+            tg_res = alert_manager.send_test_telegram(bot_token=tg_token_in, chat_id=tg_chat_in)
+            if tg_res.get("success"):
+                st.success("🟢 Telegram टेस्ट संदेश भेजा गया!")
+            else:
+                st.warning(f"🟡 Telegram: {tg_res.get('message')}")
+
         if wa_phone_in and wa_key_in:
             wa_res = alert_manager.send_test_whatsapp(phone=wa_phone_in, apikey=wa_key_in)
             if wa_res.get("success"):
@@ -201,15 +234,24 @@ with st.sidebar.expander("🔔 Alerts Config (WhatsApp & Telegram)", expanded=Fa
                 wa_done = True
             else:
                 st.warning(f"🟡 WhatsApp: {wa_res.get('message')}")
+        elif not (tg_token_in and tg_chat_in):
+            st.info("कृपया Telegram या WhatsApp की डिटेल्स भरें।")
 
-        if tg_token_in and tg_chat_in:
-            tg_res = alert_manager.send_test_telegram(bot_token=tg_token_in, chat_id=tg_chat_in)
-            if tg_res.get("success"):
-                st.success("🟢 Telegram टेस्ट संदेश भेजा गया!")
-            else:
-                st.warning(f"🟡 Telegram: {tg_res.get('message')}")
-        elif not wa_done:
-            st.info("कृपया WhatsApp या Telegram की डिटेल्स भरें।")
+    st.markdown("---")
+    st.markdown("**⚡ On-Demand Telegram Triggers (जब चाहो तब भेजें):**")
+    if st.button("🌅 Send Morning Digest Now", key="btn_sb_morn_now", use_container_width=True):
+        m_res = morning_scheduler.trigger_now(bot_token=tg_token_in, chat_id=tg_chat_in)
+        if m_res.get("success"):
+            st.success("🟢 Morning Digest आपके Telegram पर भेजा गया!")
+        else:
+            st.warning(f"🟡 {m_res.get('message')}")
+
+    if st.button("🎯 Send Nifty 100 Screener Now", key="btn_sb_screen_now", use_container_width=True):
+        sc_res = send_telegram_message_safe(generate_instant_screener_telegram_alert(), bot_token=tg_token_in, chat_id=tg_chat_in)
+        if sc_res.get("success"):
+            st.success("🟢 Nifty 100 स्क्रीनर अलर्ट Telegram पर भेजा गया!")
+        else:
+            st.warning(f"🟡 {sc_res.get('message')}")
 
 st.sidebar.markdown("---")
 st.sidebar.subheader("⚙️ Scoring Weights (वजन)")
@@ -657,9 +699,45 @@ with tab6:
     st.link_button("📲 Share Complete Watchlist & Daily Report to WhatsApp (1-Click Free)", wa_digest_url, use_container_width=True)
 
     st.markdown("---")
-    st.subheader("🤖 Automated Notification Engine (WhatsApp & Telegram)")
+    st.subheader("🤖 Telegram Automated & On-Demand Alert Center")
+    st.markdown("""
+    **यह सिस्टम आपकी दोनो ज़रूरतों को 100% पूरा करता है:**
+    1. **🌅 सवेरे खुद ही अलर्ट (Automatic Morning Digest):** हर कारोबारी सुबह 08:30 AM IST को पूरा मार्केट ट्रेंड, Nifty 100 के रेडी-टू-बाय स्टॉक्स, एंट्री, SL और टार्गेट आपके Telegram पर खुद आ जाएगा।
+    2. **⚡ जब चाहो तब अलर्ट (On-Demand Alerts):** दिन में किसी भी समय अपने फ़ोन पर Telegram में सिर्फ ` /scan ` लिखकर भेजें — बॉट तुरंत लाइव EOD कैंडल्स स्कैन करके आपको रेडी सिग्नल्स भेज देगा! या नीचे दिए गए बटन पर क्लिक करें।
+    """)
 
-    with st.expander("ℹ️ WhatsApp CallMeBot API Key क्यों नहीं आ रही है? (और सबसे तेज़ समाधान)", expanded=False):
+    col_tg1, col_tg2 = st.columns(2)
+    with col_tg1:
+        if st.button("🌅 Send Morning Market Digest Now", type="primary", key="btn_tab6_morn_now", use_container_width=True):
+            res_m = morning_scheduler.trigger_now()
+            if res_m.get("success"):
+                st.success("🟢 सवेरे का मार्केट डाइजेस्ट आपके Telegram पर भेज दिया गया!")
+            else:
+                st.warning(f"🟡 {res_m.get('message')}")
+
+    with col_tg2:
+        if st.button("🎯 Send Nifty 100 Screener Now", key="btn_tab6_screen_now", use_container_width=True):
+            res_s = send_telegram_message_safe(generate_instant_screener_telegram_alert())
+            if res_s.get("success"):
+                st.success("🟢 Nifty 100 स्क्रीनर अलर्ट Telegram पर भेज दिया गया!")
+            else:
+                st.warning(f"🟡 {res_s.get('message')}")
+
+    st.markdown("""
+    <div style="background: rgba(14, 165, 233, 0.08); border: 1px solid rgba(14, 165, 233, 0.25); border-radius: 8px; padding: 14px 18px; margin: 12px 0;">
+        <h4 style="color: #38bdf8; margin: 0 0 8px 0;">📱 फ़ोन से Telegram Bot पर चैट करके कभी भी अलर्ट माँगें (On-Demand):</h4>
+        <p style="color: #cbd5e1; font-size: 0.88rem; margin-bottom: 8px;">
+            आपको बार-बार वेबसाइट खोलने की भी ज़रूरत नहीं है। अपने फ़ोन पर Telegram ऐप खोलें और अपने बॉट को ये संदेश भेजें:
+        </p>
+        <ul style="color: #94a3b8; font-size: 0.85rem; padding-left: 20px;">
+            <li><code>/scan</code> — Nifty 100 के सभी स्टॉक्स तुरंत स्कैन करके Ready-to-Buy सेटअप्स (Entry, SL, Target) भेजेगा।</li>
+            <li><code>/morning</code> — आज की सवेरे की पूरी रिसर्च रिपोर्ट भेजेगा।</li>
+            <li><code>/status</code> — टर्मिनल और मार्केट स्टेटस की जाँच करेगा।</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+    with st.expander("ℹ️ Telegram Bot कैसे बनाएँ? (60 सेकंड की गाइड) और WhatsApp अपडेट", expanded=False):
         st.markdown("""
         ### 🔍 CallMeBot API Key न मिलने का कारण:
         1. **बॉट के सर्वर स्लॉट्स फुल हैं:** CallMeBot एक फ़्री कम्युनिटी सेवा है। वर्तमान में अत्यधिक लोड होने के कारण उनके आधिकारिक पेज पर स्पष्ट लिखा है:
