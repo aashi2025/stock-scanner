@@ -23,8 +23,8 @@ def main():
     print("🌅 NSE Morning Swing Market Alert Dispatcher")
     print("=======================================================")
 
-    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip() or "9074898916:AAFRMxWBsl4d3rO6uoo-dJ_9UQPJut_8chQ"
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip() or "5246742802"
 
     if not token or not chat_id:
         print("❌ Error: TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID environment variable not found.")
