@@ -56,7 +56,14 @@ def render_swing_action_screener_tab():
     with col_act3:
         filter_signal = st.selectbox(
             "Filter Signals:",
-            ["All Setups", "🟢 READY TO BUY Only", "⏳ WAIT FOR CONFIRMATION Only", "Setup B (Breakout) Only", "Setup A (Pullback) Only"],
+            [
+                "All Setups",
+                "🚀 Setup C (Supertrend Flip) Only",
+                "🟢 READY TO BUY Only",
+                "⏳ WAIT FOR CONFIRMATION Only",
+                "Setup B (Breakout) Only",
+                "Setup A (Pullback) Only"
+            ],
             index=0,
             key="sb_screener_filter"
         )
@@ -77,19 +84,41 @@ def render_swing_action_screener_tab():
     wait_count = sum(1 for r in results if r["signal"] == "⏳ WAIT FOR CONFIRMATION")
     pullback_count = sum(1 for r in results if "Pullback" in r["setup_type"])
     breakout_count = sum(1 for r in results if "Breakout" in r["setup_type"])
+    st_flip_count = sum(1 for r in results if r.get("is_supertrend_flip") or "Supertrend Flip" in r.get("setup_type", ""))
 
     m1, m2, m3, m4, m5 = st.columns(5)
     m1.metric("Universe Scanned", f"{len(NIFTY_100_SYMBOLS)} Stocks", "Nifty 100")
-    m2.metric("Matching Setups", f"{len(results)} Stocks", "Passed 4 Filters")
+    m2.metric("Matching Setups", f"{len(results)} Stocks", "Passed Rules")
     m3.metric("🟢 Ready to Buy", f"{ready_count}", "Confirmed Trigger")
     m4.metric("⏳ Confirmation Needed", f"{wait_count}", "Testing Support")
-    m5.metric("Setup Types", f"{breakout_count} Breakout", f"{pullback_count} Pullback")
+    m5.metric("Setup Types", f"{st_flip_count} ST Flip", f"{breakout_count} BO / {pullback_count} PB")
+
+    # Formula Explainer Expander
+    with st.expander("ℹ️ Screening Rules & Mathematical Formulas (Chartink Special Included)", expanded=False):
+        st.markdown("""
+        **1. Setup C: Institutional Fresh Supertrend Flip (Chartink Formula):**
+        * `[0] Daily Close > [0] 200 EMA` (Long-term Bullish Trend)
+        * `[0] Daily Close > [0] Supertrend(7, 3)` AND `[-1] Daily Close <= [-1] Supertrend(7, 3)` (Fresh Day-1 Bullish Flip)
+        * `(Close - Low) / (High - Low) > 0.65` (Strong Bullish Close in upper 35% of daily range)
+        * `Close > Open` (Solid Green Candle Body)
+        * `Daily Volume > 20 SMA Volume` (Above-Average Institutional Participation)
+        * `55 < Daily RSI(14) < 70` (Active Momentum Zone, Not Overbought)
+        * `Close < 200 EMA * 1.15` (Within 15% of 200 EMA — Low Risk, Not Extended)
+
+        **2. Setup B: Solid Resistance Breakout:**
+        * Breaks 20-day swing high resistance with strong candle body & minimal upper wick.
+
+        **3. Setup A: 200 EMA / Supertrend Support Pullback:**
+        * Tests mean support line with green reversal candle and 1:2 R:R target.
+        """)
 
     st.markdown("---")
 
     # Apply Filtering
     filtered_results = list(results)
-    if filter_signal == "🟢 READY TO BUY Only":
+    if filter_signal == "🚀 Setup C (Supertrend Flip) Only":
+        filtered_results = [r for r in filtered_results if r.get("is_supertrend_flip") or "Supertrend Flip" in r.get("setup_type", "")]
+    elif filter_signal == "🟢 READY TO BUY Only":
         filtered_results = [r for r in filtered_results if r["signal"] == "🟢 READY TO BUY"]
     elif filter_signal == "⏳ WAIT FOR CONFIRMATION Only":
         filtered_results = [r for r in filtered_results if r["signal"] == "⏳ WAIT FOR CONFIRMATION"]
