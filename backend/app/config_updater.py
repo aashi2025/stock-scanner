@@ -118,12 +118,38 @@ def save_notification_credentials(
 
 
 def get_current_notification_credentials():
-    """Returns current notification credentials in .env / os.environ."""
+    """Returns current notification credentials in .env / os.environ / st.secrets / defaults."""
     dotenv.load_dotenv(ENV_FILE, override=True)
+    
+    tg_token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip("'\"")
+    tg_chat = os.getenv("TELEGRAM_CHAT_ID", "").strip("'\"")
+
+    if not tg_token:
+        try:
+            import streamlit as st
+            if hasattr(st, "secrets") and "TELEGRAM_BOT_TOKEN" in st.secrets:
+                tg_token = str(st.secrets["TELEGRAM_BOT_TOKEN"]).strip()
+        except Exception:
+            pass
+
+    if not tg_chat:
+        try:
+            import streamlit as st
+            if hasattr(st, "secrets") and "TELEGRAM_CHAT_ID" in st.secrets:
+                tg_chat = str(st.secrets["TELEGRAM_CHAT_ID"]).strip()
+        except Exception:
+            pass
+
+    # Default configured values
+    if not tg_token:
+        tg_token = "9074898916:AAFRMxWBsl4d3rO6uoo-dJ_9UQPJut_8chQ"
+    if not tg_chat:
+        tg_chat = "5246742802"
+
     return {
         "whatsapp_phone": os.getenv("WHATSAPP_PHONE", "").strip("'\""),
         "whatsapp_apikey": os.getenv("WHATSAPP_CALLMEBOT_APIKEY", "").strip("'\""),
-        "telegram_bot_token": os.getenv("TELEGRAM_BOT_TOKEN", "").strip("'\""),
-        "telegram_chat_id": os.getenv("TELEGRAM_CHAT_ID", "").strip("'\"")
+        "telegram_bot_token": tg_token,
+        "telegram_chat_id": tg_chat
     }
 
